@@ -53,25 +53,42 @@ int main() {
 
 // Function to draw the main menu and handle button clicks
 void DrawMainMenu() {
-    DrawText("Ransomware Simulation", 250, 50, 20, BLACK);  // Displays the title text at the top of the screen
+    const char *Title = "Ransomware Simulation";
+    int FontSize = 20;
+    // Measure the width of the text
+    int textWidth = MeasureText(Title, FontSize);
+    // Center X position
+    int centerX = (screenWidth - textWidth) / 2;
+    // Draw the text centered horizontally at y = 50
+    DrawText(Title, centerX, 50, FontSize, BLACK);
+
+    // Detect mouse position
+    Vector2 MousePosition = GetMousePosition();
 
     // Define clickable buttons with their positions and sizes
     Rectangle CreateButton = {300, 150, 200, 50};
     Rectangle EncryptButton = {300, 250, 200, 50};
     Rectangle DecryptButton = {300, 350, 200, 50};
 
+    // Check if mouse is hovering over the buttons
+    bool HoverCreate = CheckCollisionPointRec(MousePosition, CreateButton);
+    bool HoverEncrypt = CheckCollisionPointRec(MousePosition, EncryptButton);
+    bool HoverDecrypt = CheckCollisionPointRec(MousePosition, DecryptButton);
+
+    // Change color if hovered, otherwise use default color
+    Color CreateColor = HoverCreate ? DARKBLUE : BLUE;
+    Color EncryptColor = HoverEncrypt ? DARKGREEN : GREEN;
+    Color DecryptColor = HoverDecrypt ? MAROON : RED;
+
     // Draw the buttons on the screen
-    DrawRectangleRec(CreateButton, BLUE);
+    DrawRectangleRec(CreateButton, CreateColor);
     DrawText("Create File", CreateButton.x + 20, CreateButton.y + 15, 20, WHITE);
 
-    DrawRectangleRec(EncryptButton, GREEN);
+    DrawRectangleRec(EncryptButton, EncryptColor);
     DrawText("Encrypt File", EncryptButton.x + 20, EncryptButton.y + 15, 20, WHITE);
 
-    DrawRectangleRec(DecryptButton, RED);
+    DrawRectangleRec(DecryptButton, DecryptColor);
     DrawText("Decrypt File", DecryptButton.x + 20, DecryptButton.y + 15, 20, WHITE);
-
-    // Detect mouse position
-    Vector2 MousePosition = GetMousePosition();
 
     // Check if the user clicks the "Create File" button
     if (CheckCollisionPointRec(MousePosition, CreateButton) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) { CreateFile(); }
@@ -234,9 +251,9 @@ void CreateFile() {
 
         // Display messages
         if (CreationSuccess) {
-            DrawText("File Creation successful!", 300, 430, 20, BLUE);
+            DrawText("File Creation successful!", 300, 470, 20, BLUE);
         } else if (FileExistsError) {
-            DrawText("Error: File already exists!", 300, 430, 20, RED);
+            DrawText("Error: File already exists!", 300, 470, 20, RED);
         }
 
         EndDrawing();
