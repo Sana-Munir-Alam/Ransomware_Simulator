@@ -1,13 +1,3 @@
-// #ifndef ENCRYPTION_H
-// #define ENCRYPTION_H
-// #include <string>
-// using namespace std;
-
-// void Encrypt(const string &filename);
-// void Decrypt(const string &filename);
-
-// #endif
-
 #ifndef ENCRYPTION_H
 #define ENCRYPTION_H
 #include <string>
