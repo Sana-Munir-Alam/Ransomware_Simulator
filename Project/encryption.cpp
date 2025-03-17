@@ -1,26 +1,3 @@
-// #include "encryption.h"
-// #include <fstream>
-// #include <iostream>
-// #include <algorithm>
-// using namespace std;
-
-// void Encrypt(const string &filename) {
-//     ifstream file(filename);
-//     if (!file) return;
-//     string content((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
-//     file.close();
-
-//     reverse(content.begin(), content.end());
-
-//     ofstream outFile(filename);
-//     outFile << content;
-//     outFile.close();
-// }
-
-// void Decrypt(const std::string &filename) {
-//     Encrypt(filename);  // Since encryption is reversing, doing it again decrypts.
-// }
-
 #include "encryption.h"
 #include <fstream>
 #include <iostream>
