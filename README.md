@@ -1,3 +1,6 @@
+# NOTIFICATION for TEAM
+the file OOp_Applied has beend edited to now work based upon OOP principle in which simpale direct inheritance is occuring. A base class encryption from which the Reverse/Ceaser/and Playfair inherit from, than the over ride function play their role, and the code Alhamdulillah works
+
 # Ransomware Simulator
 
 # Inlcude the Raylib library
