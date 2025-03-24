@@ -32,10 +32,6 @@ void CreateFile();      // Function to create a file with user input
 void EncryptFile();     // Function to encrypt a selected file
 void DecryptFile();     // Function to decrypt a selected file
 
-// Global variables
-bool FileCreated = false;   // Boolean flag to track whether a file has been created
-string SelectedFile;        // Stores the name of the currently selected file
-
 int main() {
     InitWindow(800, 600, "Ransomware Simulation");  // Creates a window with the title "Ransomware Simulation"
     SetTargetFPS(60);                               // Sets the frame rate to 60 FPS
@@ -56,12 +52,9 @@ int main() {
 void DrawMainMenu() {
     const char *Title = "Ransomware Simulation";
     int FontSize = 20;
-    // Measure the width of the text
-    int textWidth = MeasureText(Title, FontSize);
-    // Center X position
-    int centerX = (screenWidth - textWidth) / 2;
-    // Draw the text centered horizontally at y = 50
-    DrawText(Title, centerX, 50, FontSize, BLACK);
+    int textWidth = MeasureText(Title, FontSize);   // Measure the width of the text
+    int centerX = (screenWidth - textWidth) / 2;    // Center X position
+    DrawText(Title, centerX, 50, FontSize, BLACK);  // Draw the text centered horizontally at y = 50
 
     // Detect mouse position
     Vector2 MousePosition = GetMousePosition();
@@ -109,8 +102,8 @@ vector<string> WrapText(const string &Text, int MaxWidth, int FontSize) {
     for (char c : Text) {   // Reads Character by character
         if (c == ' ' || c == '\n') {    // Handling Space and NewLine
             int WordWidth = MeasureText(Word.c_str(), FontSize);    // Calculating Pixel Width of text
-            if (LineWidth + WordWidth >= MaxWidth) {
-                Lines.push_back(CurrentLine);
+            if (LineWidth + WordWidth >= MaxWidth) {    // If the line width is filled with text
+                Lines.push_back(CurrentLine);           // Save the current line
                 CurrentLine = Word + " ";
                 LineWidth = WordWidth + MeasureText(" ", FontSize);
             } else {
@@ -127,7 +120,7 @@ vector<string> WrapText(const string &Text, int MaxWidth, int FontSize) {
             Word += c;  // Simply Save in the character
         }
     }
-    if (!Word.empty()) {    // Handlng Unfinished word
+    if (!Word.empty()) {    // Handling Unfinished word
         if (LineWidth + MeasureText(Word.c_str(), FontSize) > MaxWidth) {
             Lines.push_back(CurrentLine);   // Save full line
             CurrentLine = Word;             // Start new line with last word
