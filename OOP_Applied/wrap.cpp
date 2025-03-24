@@ -23,7 +23,8 @@ const int buttonSpacing = 20;
 
 float totalWidth = (buttonWidth * 3) + (buttonSpacing * 2);
 float startX = (screenWidth - totalWidth) / 2;
-float buttonY = 300; // Y position for buttons
+float buttonDY = 300; // Y position for buttons decrytption
+float buttonEY = 240; // Y position for buttons encryption
 
 // Function prototypes for different operations
 void DrawMainMenu();    // Function to display the main menu
@@ -292,21 +293,24 @@ void EncryptFile() {
         }
 
         // Define buttons
-        Rectangle EncryptButton = {startX, buttonY, buttonWidth, buttonHeight};
-        Rectangle CaesarButton = {startX + buttonWidth + buttonSpacing, buttonY, buttonWidth, buttonHeight};
-        Rectangle PlayFairButton = {startX + (buttonWidth + buttonSpacing) * 2, buttonY, buttonWidth, buttonHeight};
+        Rectangle EncryptButton = {startX, buttonEY, buttonWidth, buttonHeight};
+        Rectangle VigenereButton = {startX, buttonEY + buttonHeight + buttonSpacing, buttonWidth, buttonHeight};
+        Rectangle CaesarButton = {startX + buttonWidth + buttonSpacing, buttonEY, buttonWidth, buttonHeight};
+        Rectangle PlayFairButton = {startX + (buttonWidth + buttonSpacing) * 2, buttonEY, buttonWidth, buttonHeight};
         Rectangle BackButton = {300, 500, 200, 50};
 
         Vector2 MousePosition = GetMousePosition();
 
         // Check if mouse is hovering over the buttons
         bool HoverEncrypt = CheckCollisionPointRec(MousePosition, EncryptButton);
+        bool HoverVigenere = CheckCollisionPointRec(MousePosition, VigenereButton);
         bool HoverCaesar = CheckCollisionPointRec(MousePosition, CaesarButton);
         bool HoverPlayFair = CheckCollisionPointRec(MousePosition, PlayFairButton);
         bool HoverBack = CheckCollisionPointRec(MousePosition, BackButton);
 
         // Change color if hovered, otherwise use default color
         Color EncryptColor = HoverEncrypt ? DARKGREEN : GREEN;
+        Color VigenereColor = HoverVigenere ? BROWN : BEIGE;
         Color CaesarColor = HoverCaesar ? DARKBLUE : BLUE;
         Color PlayFairColor = HoverPlayFair ? MAROON : RED;
         Color BackColor = HoverBack ? DARKGRAY : GRAY;
@@ -315,7 +319,7 @@ void EncryptFile() {
         if (!encryptionInProgress) {
             // Encrypt Button [Reverse String encryptio]
             DrawRectangleRec(EncryptButton, EncryptColor);
-            DrawText("Encrypt", EncryptButton.x + 70, EncryptButton.y + 15, 20, WHITE);
+            DrawText("Encrypt", EncryptButton.x + 70, EncryptButton.y + 15, 20, WHITE);    // ALign the text in the center
 
             if (CheckCollisionPointRec(MousePosition, EncryptButton) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && FilenameIndex > 0) {
                 string FullFilename = string(Filename) + ".txt";
@@ -327,8 +331,31 @@ void EncryptFile() {
                 }else if (fs::exists(FullFilename)) {
                     ReverseEncryption revEnc; // CREATING REVERSE ENCRYPTION OBJECT
                     revEnc.encrypt(FullFilename);
-                    //Encrypt(FullFilename);    DONT FORGET TO REMOVE THIS
                     LogAction("File " + FullFilename + " encrypted");
+                    EncryptionSuccess = true;
+                    encryptionInProgress = true;  // Lock other buttons
+                } else {
+                    errorMessage = "Error: File does not exist!";
+                    errorStartTime = chrono::steady_clock::now();
+                    showError = true;
+                }
+            }
+
+            // Vignere Button
+            DrawRectangleRec(VigenereButton, VigenereColor);
+            DrawText("Vigenere", VigenereButton.x + 70, VigenereButton.y + 15, 20, WHITE);    // ALign the text in the center
+
+            if (CheckCollisionPointRec(MousePosition, VigenereButton) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && FilenameIndex > 0) {
+                string FullFilename = string(Filename) + ".txt";
+                // Prevent encryption of log.txt
+                if (FullFilename == "log.txt") {
+                    errorMessage = "Error: Cannot encrypt log file!";
+                    errorStartTime = chrono::steady_clock::now();
+                    showError = true;
+                }else if (fs::exists(FullFilename)) {
+                    VigenereEncryption vigEnc; // CREATING REVERSE ENCRYPTION OBJECT
+                    vigEnc.encrypt(FullFilename);
+                    LogAction("File " + FullFilename + " encrypted using Vignere Cypher");
                     EncryptionSuccess = true;
                     encryptionInProgress = true;  // Lock other buttons
                 } else {
@@ -340,7 +367,7 @@ void EncryptFile() {
 
             // Caesar Button
             DrawRectangleRec(CaesarButton, CaesarColor);
-            DrawText("Caesar", CaesarButton.x + 60, CaesarButton.y + 15, 20, WHITE);
+            DrawText("Caesar", CaesarButton.x + 60, CaesarButton.y + 15, 20, WHITE);    // ALign the text in the center
 
             if (CheckCollisionPointRec(MousePosition, CaesarButton) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && FilenameIndex > 0) {
                 string FullFilename = string(Filename) + ".txt";
@@ -352,7 +379,6 @@ void EncryptFile() {
                 } else if (fs::exists(FullFilename)) {
                     CaesarEncryption caesarEnc; // CREATING CEASER ENCRYPTION OBJECT
                     caesarEnc.encrypt(FullFilename);
-                    //CaesarEncrypt(FullFilename);  DONT FORGET TO REMOVE THIS
                     LogAction("File " + FullFilename + " encrypted using Caesar Cipher");
                     EncryptionSuccess = true;
                     encryptionInProgress = true;  // Lock other buttons
@@ -365,7 +391,7 @@ void EncryptFile() {
 
             // PlayFair Button
             DrawRectangleRec(PlayFairButton, PlayFairColor);
-            DrawText("PlayFair", PlayFairButton.x + 50, PlayFairButton.y + 15, 20, WHITE);
+            DrawText("PlayFair", PlayFairButton.x + 50, PlayFairButton.y + 15, 20, WHITE);    // ALign the text in the center
 
             if (CheckCollisionPointRec(MousePosition, PlayFairButton) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && FilenameIndex > 0) {
                 string FullFilename = string(Filename) + ".txt";
@@ -377,7 +403,6 @@ void EncryptFile() {
                 } else if (fs::exists(FullFilename)) {
                     PlayFairEncryption playFairEnc; // CREATING CEASER ENCRYPTION OBJECT
                     playFairEnc.encrypt(FullFilename);
-                    //PlayFairEncrypt(FullFilename); DONT FORGET TO REMOVE THIS
                     LogAction("File " + FullFilename + " encrypted using PlayFair Cipher");
                     EncryptionSuccess = true;
                     encryptionInProgress = true;  // Lock other buttons
@@ -391,6 +416,9 @@ void EncryptFile() {
             // If encryption is in progress, make the buttons look inactive (gray)
             DrawRectangleRec(EncryptButton, GRAY);
             DrawText("Encrypt", EncryptButton.x + 70, EncryptButton.y + 15, 20, DARKGRAY);
+
+            DrawRectangleRec(VigenereButton, GRAY);
+            DrawText("Vignere", VigenereButton.x + 70, VigenereButton.y + 15, 20, DARKGRAY);
 
             DrawRectangleRec(CaesarButton, GRAY);
             DrawText("Caesar", CaesarButton.x + 60, CaesarButton.y + 15, 20, DARKGRAY);
@@ -410,7 +438,7 @@ void EncryptFile() {
 
         // Display success message
         if (EncryptionSuccess) {
-            DrawText("Encryption Successful!", 280, 400, 20, BLACK);
+            DrawText("Encryption Successful!", 280, 430, 20, BLACK);
         }
 
         // Display error message for 3 seconds
@@ -491,19 +519,22 @@ void DecryptFile() {
         Vector2 MousePosition = GetMousePosition();
 
         // Define Buttons
-        Rectangle DecryptButton = {startX, buttonY, buttonWidth, buttonHeight};
-        Rectangle CaesarButton = {startX + buttonWidth + buttonSpacing, buttonY, buttonWidth, buttonHeight};
-        Rectangle PlayFairButton = {startX + (buttonWidth + buttonSpacing) * 2, buttonY, buttonWidth, buttonHeight};
+        Rectangle DecryptButton = {startX, buttonDY, buttonWidth, buttonHeight};
+        Rectangle VigenereButton = {startX, buttonDY + buttonHeight + buttonSpacing, buttonWidth, buttonHeight};
+        Rectangle CaesarButton = {startX + buttonWidth + buttonSpacing, buttonDY, buttonWidth, buttonHeight};
+        Rectangle PlayFairButton = {startX + (buttonWidth + buttonSpacing) * 2, buttonDY, buttonWidth, buttonHeight};
         Rectangle BackButton = {300, 500, 200, 50};
 
         // Check if mouse is hovering over the buttons
         bool HoverDecrypt = CheckCollisionPointRec(MousePosition, DecryptButton);
+        bool HoverVigenere = CheckCollisionPointRec(MousePosition, VigenereButton);
         bool HoverCaesar = CheckCollisionPointRec(MousePosition, CaesarButton);
         bool HoverPlayFair = CheckCollisionPointRec(MousePosition, PlayFairButton);
         bool HoverBack = CheckCollisionPointRec(MousePosition, BackButton);
 
         // Change color if hovered, otherwise use default color
         Color DecryptColor = HoverDecrypt ? DARKGREEN : GREEN;
+        Color VigenereColor = HoverVigenere ? BROWN : BEIGE;
         Color CaesarColor = HoverCaesar ? DARKBLUE : BLUE;
         Color PlayFairColor = HoverPlayFair ? MAROON : RED;
         Color BackColor = HoverBack ? DARKGRAY : GRAY;
@@ -511,17 +542,23 @@ void DecryptFile() {
         // Draw Buttons (Disabled if decryption is in progress)
         if (!DecryptionInProgress) {
             DrawRectangleRec(DecryptButton, DecryptColor);
-            DrawText("Decrypt", DecryptButton.x + 70, DecryptButton.y + 15, 20, WHITE);
+            DrawText("Decrypt", DecryptButton.x + 70, DecryptButton.y + 15, 20, WHITE);    // ALign the text in the center
+
+            DrawRectangleRec(VigenereButton, VigenereColor);
+            DrawText("Vignere", VigenereButton.x + 70, VigenereButton.y + 15, 20, WHITE);    // ALign the text in the center
 
             DrawRectangleRec(CaesarButton, CaesarColor);
-            DrawText("Caesar", CaesarButton.x + 60, CaesarButton.y + 15, 20, WHITE);
+            DrawText("Caesar", CaesarButton.x + 60, CaesarButton.y + 15, 20, WHITE);    // ALign the text in the center
 
             DrawRectangleRec(PlayFairButton, PlayFairColor);
-            DrawText("PlayFair", PlayFairButton.x + 50, PlayFairButton.y + 15, 20, WHITE);
+            DrawText("PlayFair", PlayFairButton.x + 50, PlayFairButton.y + 15, 20, WHITE);    // ALign the text in the center
         } else {
-            // If encryption is in progress, make the buttons look inactive (gray)
+            // If decryption is in progress, make the buttons look inactive (gray)
             DrawRectangleRec(DecryptButton, GRAY);
             DrawText("Decrypt", DecryptButton.x + 70, DecryptButton.y + 15, 20, DARKGRAY);
+
+            DrawRectangleRec(VigenereButton, GRAY);
+            DrawText("Vignere", VigenereButton.x + 70, VigenereButton.y + 15, 20, WHITE);
 
             DrawRectangleRec(CaesarButton, GRAY);
             DrawText("Caesar", CaesarButton.x + 60, CaesarButton.y + 15, 20, DARKGRAY);
@@ -532,7 +569,7 @@ void DecryptFile() {
 
         // Always Draw Back Button
         DrawRectangleRec(BackButton, BackColor);
-        DrawText("BACK", BackButton.x + 75, BackButton.y + 15, 20, WHITE);
+        DrawText("BACK", BackButton.x + 75, BackButton.y + 15, 20, WHITE);    // ALign the text in the center
 
         // Handle decryption logic (only if no decryption is already running)
         if (!DecryptionInProgress) {
@@ -550,6 +587,29 @@ void DecryptFile() {
                     revEnc.encrypt(FullFilename);
                     //Decrypt(FullFilename);
                     LogAction("File " + FullFilename + " decrypted");
+                    DecryptionSuccess = true;
+                } else {
+                    errorMessage = "Incorrect password!";
+                    showError = true;
+                    errorStartTime = chrono::steady_clock::now();
+                    DecryptionInProgress = false;
+                }
+            }
+
+            if (CheckCollisionPointRec(MousePosition, VigenereButton) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                DecryptionInProgress = true;  // Lock other buttons
+                string FullFilename = string(Filename) + ".txt";
+
+                if (!fs::exists(FullFilename)) {
+                    errorMessage = "Error: File does not exist!";
+                    showError = true;
+                    errorStartTime = chrono::steady_clock::now();
+                    DecryptionInProgress = false;
+                } else if (VerifyPassword(password)) {
+                    VigenereEncryption vigEnc;  //Creating Object for Decryption
+                    vigEnc.decrypt(FullFilename);
+                    //Decrypt(FullFilename);
+                    LogAction("File " + FullFilename + " decrypted using Vignere Cypher");
                     DecryptionSuccess = true;
                 } else {
                     errorMessage = "Incorrect password!";
