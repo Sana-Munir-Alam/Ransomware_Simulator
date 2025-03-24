@@ -34,4 +34,15 @@ public:
     void decrypt(const string &filename) override;
 };
 
+// Vigenère cipher encryption
+class VigenereEncryption : public Encryption {
+    private:
+        string key;
+        string generateKey(const string &text, const string &keyword); 
+    public:
+        //VigenereEncryption(const string &keyword);
+        void encrypt(const string &filename) override;
+        void decrypt(const string &filename) override;
+    };
+
 #endif // ENCRYPTION_H
