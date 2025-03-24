@@ -1,5 +1,15 @@
 # NOTIFICATION for TEAM
-the file OOp_Applied has beend edited to now work based upon OOP principle in which simpale direct inheritance is occuring. A base class encryption from which the Reverse/Ceaser/and Playfair inherit from, than the over ride function play their role, and the code Alhamdulillah works
+the file OOp_Applied has beend edited to now work based upon OOP principle and has most of the functionality done such as create file, encrypt file and decrypt file. The code Alhamdulillah works.
+
+## OOP Principles Used
+
+| OOP Principle   | Type Used |
+|----------------|-----------|
+| **Inheritance** | Single Inheritance (All encryption classes inherit from `Encryption`). |
+| **Polymorphism** | Runtime Polymorphism (Function overriding using `virtual` functions). |
+| **Abstraction** | Implemented via a pure virtual base class (`Encryption`). |
+| **Encapsulation** | Used in `VigenereEncryption` to protect the key generation method and the `key` variable. |
+
 
 # Ransomware Simulator
 
@@ -52,6 +62,7 @@ This project is a GUI-based file encryption and decryption system implemented in
 
 ### Error Handling
 - **Prevents overwriting** existing files by checking for duplicate names.
+-  **Prevents log.txt encryption** by mistake.
 - **Prevents multi-encryption and multi-decryption** to avoid accidental repeated operations.
 - Provides **visual indicators** (such as text highlights) to show active input fields.
 
