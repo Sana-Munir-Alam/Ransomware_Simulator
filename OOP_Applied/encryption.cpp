@@ -81,3 +81,68 @@ void PlayFairEncryption::encrypt(const string &filename) {
 void PlayFairEncryption::decrypt(const string &filename) {
     encrypt(filename);  // XOR is reversible
 }
+
+// Vigenere Cipher encryption methods
+string VigenereEncryption::generateKey(const string& text, const string& keyword) {
+    string newKey(text.size(), ' ');
+    int keyIndex = 0;
+    for (size_t i = 0; i < text.size(); i++) {
+        if (!isalpha(text[i])) {
+            newKey[i] = text[i]; // Preserve spaces, numbers, and punctuation in the key (they are not cyphered)
+        } else {
+            newKey[i] = keyword[keyIndex % keyword.size()];
+            keyIndex++;
+        }
+    }
+    return newKey;
+}
+
+void VigenereEncryption::encrypt(const string &filename) {
+    ifstream file(filename);
+    if (!file) return;
+    string text((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
+    file.close();
+    
+    string keyword = "KEYWORD"; // Example key, can be modified
+    string key = generateKey(text, keyword);
+    string cipherText;
+    
+    for (size_t i = 0; i < text.size(); i++) {
+        if (!isalpha(text[i])) {
+            cipherText.push_back(text[i]); // Preserve spaces, numbers, and punctuation
+        } else {
+            char base = isupper(text[i]) ? 'A' : 'a';
+            char x = (text[i] - base + (toupper(key[i]) - 'A')) % 26 + base;
+            cipherText.push_back(x);
+        }
+    }
+    
+    ofstream outFile(filename);
+    outFile << cipherText;
+    outFile.close();
+}
+
+void VigenereEncryption::decrypt(const string &filename) {
+    ifstream file(filename);
+    if (!file) return;
+    string cipherText((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
+    file.close();
+    
+    string keyword = "KEYWORD"; // Example key, should match encryption key
+    string key = generateKey(cipherText, keyword);
+    string originalText;
+    
+    for (size_t i = 0; i < cipherText.size(); i++) {
+        if (!isalpha(cipherText[i])) {
+            originalText.push_back(cipherText[i]); // Preserve spaces, numbers, and punctuation
+        } else {
+            char base = isupper(cipherText[i]) ? 'A' : 'a';
+            char x = (cipherText[i] - base - (toupper(key[i]) - 'A') + 26) % 26 + base;
+            originalText.push_back(x);
+        }
+    }
+    
+    ofstream outFile(filename);
+    outFile << originalText;
+    outFile.close();
+}
