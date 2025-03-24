@@ -319,7 +319,12 @@ void EncryptFile() {
 
             if (CheckCollisionPointRec(MousePosition, EncryptButton) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && FilenameIndex > 0) {
                 string FullFilename = string(Filename) + ".txt";
-                if (fs::exists(FullFilename)) {
+                // Prevent encryption of log.txt
+                if (FullFilename == "log.txt") {
+                    errorMessage = "Error: Cannot encrypt log file!";
+                    errorStartTime = chrono::steady_clock::now();
+                    showError = true;
+                }else if (fs::exists(FullFilename)) {
                     ReverseEncryption revEnc; // CREATING REVERSE ENCRYPTION OBJECT
                     revEnc.encrypt(FullFilename);
                     //Encrypt(FullFilename);    DONT FORGET TO REMOVE THIS
@@ -339,7 +344,12 @@ void EncryptFile() {
 
             if (CheckCollisionPointRec(MousePosition, CaesarButton) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && FilenameIndex > 0) {
                 string FullFilename = string(Filename) + ".txt";
-                if (fs::exists(FullFilename)) {
+                // Prevent encryption of log.txt
+                if (FullFilename == "log.txt") {
+                    errorMessage = "Error: Cannot encrypt log file!";
+                    errorStartTime = chrono::steady_clock::now();
+                    showError = true;
+                } else if (fs::exists(FullFilename)) {
                     CaesarEncryption caesarEnc; // CREATING CEASER ENCRYPTION OBJECT
                     caesarEnc.encrypt(FullFilename);
                     //CaesarEncrypt(FullFilename);  DONT FORGET TO REMOVE THIS
@@ -359,7 +369,12 @@ void EncryptFile() {
 
             if (CheckCollisionPointRec(MousePosition, PlayFairButton) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && FilenameIndex > 0) {
                 string FullFilename = string(Filename) + ".txt";
-                if (fs::exists(FullFilename)) {
+                // Prevent encryption of log.txt
+                if (FullFilename == "log.txt") {
+                    errorMessage = "Error: Cannot encrypt log file!";
+                    errorStartTime = chrono::steady_clock::now();
+                    showError = true;
+                } else if (fs::exists(FullFilename)) {
                     PlayFairEncryption playFairEnc; // CREATING CEASER ENCRYPTION OBJECT
                     playFairEnc.encrypt(FullFilename);
                     //PlayFairEncrypt(FullFilename); DONT FORGET TO REMOVE THIS
