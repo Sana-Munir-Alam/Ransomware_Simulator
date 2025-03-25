@@ -30,7 +30,7 @@ float startX = (screenWidth - totalWidth) / 2;
 float buttonDY = 300; // Y position for buttons decrytption
 float buttonEY = 240; // Y position for buttons encryption
 char correctAccount[10] = "123456789";
-int requiredCandy = 10000;
+int requiredAmount = 10000;
 
 // Function prototypes for different operations
 void DrawMainMenu();    // Function to display the main menu
@@ -225,7 +225,7 @@ void CreateFile() {
 
         // Change color if hovered, otherwise use default color
         Color SaveColor = HoverSave ? DARKGREEN : GREEN;
-        Color BackColor = HoverBack ? MAROON : RED;
+        Color BackColor = HoverBack ? DARKGRAY : GRAY;
 
         // Draw Save Button
         DrawRectangleRec(SaveButton, SaveColor);
@@ -439,7 +439,7 @@ void EncryptFile() {
 
         // Back Button (always active)
         DrawRectangleRec(BackButton, BackColor);
-        DrawText("BACK", BackButton.x + 75, BackButton.y + 15, 20, WHITE);
+        DrawText("Back", BackButton.x + 75, BackButton.y + 15, 20, WHITE);
 
         if (CheckCollisionPointRec(MousePosition, BackButton) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             done = true;  // Exit
@@ -555,31 +555,31 @@ void DecryptFile() {
             DrawText("Decrypt", DecryptButton.x + 70, DecryptButton.y + 15, 20, WHITE);    // ALign the text in the center
 
             DrawRectangleRec(VigenereButton, VigenereColor);
-            DrawText("Vignere", VigenereButton.x + 70, VigenereButton.y + 15, 20, WHITE);    // ALign the text in the center
+            DrawText("Vignere", VigenereButton.x + 60, VigenereButton.y + 15, 20, WHITE);    // ALign the text in the center
 
             DrawRectangleRec(CaesarButton, CaesarColor);
             DrawText("Caesar", CaesarButton.x + 60, CaesarButton.y + 15, 20, WHITE);    // ALign the text in the center
 
             DrawRectangleRec(PlayFairButton, PlayFairColor);
-            DrawText("PlayFair", PlayFairButton.x + 50, PlayFairButton.y + 15, 20, WHITE);    // ALign the text in the center
+            DrawText("PlayFair", PlayFairButton.x + 60, PlayFairButton.y + 15, 20, WHITE);    // ALign the text in the center
         } else {
             // If decryption is in progress, make the buttons look inactive (gray)
             DrawRectangleRec(DecryptButton, GRAY);
             DrawText("Decrypt", DecryptButton.x + 70, DecryptButton.y + 15, 20, DARKGRAY);
 
             DrawRectangleRec(VigenereButton, GRAY);
-            DrawText("Vignere", VigenereButton.x + 70, VigenereButton.y + 15, 20, WHITE);
+            DrawText("Vignere", VigenereButton.x + 60, VigenereButton.y + 15, 20, WHITE);
 
             DrawRectangleRec(CaesarButton, GRAY);
             DrawText("Caesar", CaesarButton.x + 60, CaesarButton.y + 15, 20, DARKGRAY);
 
             DrawRectangleRec(PlayFairButton, GRAY);
-            DrawText("PlayFair", PlayFairButton.x + 50, PlayFairButton.y + 15, 20, DARKGRAY);
+            DrawText("PlayFair", PlayFairButton.x + 60, PlayFairButton.y + 15, 20, DARKGRAY);
         }
 
         // Always Draw Back Button
         DrawRectangleRec(BackButton, BackColor);
-        DrawText("BACK", BackButton.x + 75, BackButton.y + 15, 20, WHITE);    // ALign the text in the center
+        DrawText("Back", BackButton.x + 75, BackButton.y + 15, 20, WHITE);    // ALign the text in the center
 
         // Handle decryption logic (only if no decryption is already running)
         if (!DecryptionInProgress) {
@@ -707,15 +707,26 @@ void PayMoney() {
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
-        DrawText("Your Important Files Are Encrypted!", 200, 100, 20, RED);
-        DrawText("To Access Them, Pay 10,000 Candy to:", 220, 150, 20, BLACK);
-        DrawText("Account: CANDY CRUSH", 300, 180, 20, BLACK);
+        // Measure text width dynamically
+        int text1Width = MeasureText("Your Important Files Are Encrypted!", 20);
+        int text2Width = MeasureText("To Access Them, Pay $10,000 to:", 20);
+        int text3Width = MeasureText("Account: 123-456-789", 20);
+
+        // Calculate centered positions
+        int text1X = (screenWidth - text1Width) / 2;
+        int text2X = (screenWidth - text2Width) / 2;
+        int text3X = (screenWidth - text3Width) / 2;
+
+        // Draw text centered
+        DrawText("Your Important Files Are Encrypted!", text1X, 100, 20, RED);
+        DrawText("To Access Them, Pay $10,000 to:", text2X, 150, 20, BLACK);
+        DrawText("Account: 123-456-789", text3X, 180, 20, BLACK);
     
         Vector2 MousePosition = GetMousePosition();
         
         // Define Buttons
-        Rectangle ProceedButton = {startX, buttonDY, buttonWidth, buttonHeight};
-        Rectangle BackButton = {300, 500, 200, 50};
+        Rectangle ProceedButton = {190, 500, buttonWidth, buttonHeight};
+        Rectangle BackButton = {190 + buttonWidth + buttonSpacing, 500, buttonWidth, buttonHeight};
 
         // Check if mouse is hovering over the buttons
         bool HoverProceed = CheckCollisionPointRec(MousePosition, ProceedButton);
@@ -725,11 +736,11 @@ void PayMoney() {
         Color ProceedColor = HoverProceed ? DARKBLUE : BLUE;
         Color BackColor = HoverBack ? DARKGRAY : GRAY;
     
-        DrawRectangleRec(ProceedButton, HoverProceed ? DARKGREEN : GREEN);
-        DrawText("Proceed", ProceedButton.x + 40, ProceedButton.y + 15, 20, WHITE);
+        DrawRectangleRec(ProceedButton, ProceedColor);
+        DrawText("Proceed >>", ProceedButton.x + 50, ProceedButton.y + 15, 20, WHITE);
     
-        DrawRectangleRec(BackButton, HoverBack ? MAROON : RED);
-        DrawText("Back", BackButton.x + 50, BackButton.y + 15, 20, WHITE);
+        DrawRectangleRec(BackButton, BackColor);
+        DrawText("Back", BackButton.x + 70, BackButton.y + 15, 20, WHITE);
 
         // Handle Proceed button click (Always active)
         if (CheckCollisionPointRec(MousePosition, ProceedButton) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
@@ -747,7 +758,7 @@ void PayMoney() {
 
 void LoginScreen() {
     char EnteredAccount[12] = "";
-    char EnteredPassword[50] = "";
+    char EnteredPassword[10] = "";
     float EnteredAmount = 0;
     int PasswordIndex = 0;
     int AccountIndex = 0;
@@ -758,32 +769,50 @@ void LoginScreen() {
     while(!done){
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        DrawText("Login to Candy Account", 280, 80, 20, BLACK);
 
-        // Display input prompts
-        DrawText("Enter Account No", 250, 100, 20, BLACK);
-        DrawText("Enter Password:", 250, 200, 20, BLACK);
+        // Measure text width dynamically
+        int titleWidth = MeasureText("Login to User Bank Account", 30);
+        int prompt1Width = MeasureText("Enter Account No", 20);
+        int prompt2Width = MeasureText("Enter Password:", 20);
+        
+        int enteredAccountWidth = MeasureText(EnteredAccount, 20);
+        int enteredPasswordWidth = MeasureText(EnteredPassword, 20);
+
+        // Calculate centered positions
+        int titleX = (screenWidth - titleWidth) / 2;
+        int prompt1X = (screenWidth - prompt1Width) / 2;
+        int prompt2X = (screenWidth - prompt2Width) / 2;
+        
+        int inputBoxX = (screenWidth - 300) / 2;
+
+        int enteredAccountX = (screenWidth - enteredAccountWidth) / 2;
+        int enteredPasswordX = (screenWidth - enteredPasswordWidth) / 2;
+        
+        // Draw centered text
+        DrawText("Login to User Bank Account", titleX, 100, 30, BLACK);
+        DrawText("Enter Account No", prompt1X, 180, 20, BLACK);
+        DrawText("Enter Password:", prompt2X, 280, 20, BLACK);
 
         // Highlight the active input box
         if (EnteringValue) {
-            DrawRectangleLines(250, 130, 300, 30, RED); // File
+            DrawRectangleLines(inputBoxX, 210, 300, 30, RED); // Account input box
         } else {
-            DrawRectangleLines(250, 230, 300, 30, RED); // Password
+            DrawRectangleLines(inputBoxX, 310, 300, 30, RED); // Password input box
         }
 
-        DrawText(EnteredAccount, 260, 140, 20, BLACK);  // Display entered filename
+        DrawText(EnteredAccount, enteredAccountX, 210, 20, BLACK); // Draw entered text within input box
 
         // Hide password input with asterisks
         string hiddenPassword(PasswordIndex, '*');
-        DrawText(hiddenPassword.c_str(), 260, 240, 20, BLACK);
+        DrawText(hiddenPassword.c_str(), enteredPasswordX, 310, 20, BLACK);
 
         // Handle keyboard input
         int key = GetCharPressed();
         if (key > 0) {
-            if (EnteringValue && AccountIndex < 127) {
+            if (EnteringValue && AccountIndex < 11) {
                 EnteredAccount[AccountIndex++] = (char)key;
                 EnteredAccount[AccountIndex] = '\0';
-            } else if (!EnteringValue && PasswordIndex < 127) {
+            } else if (!EnteringValue && PasswordIndex < 9) {
                 EnteredPassword[PasswordIndex++] = (char)key;
                 EnteredPassword[PasswordIndex] = '\0';
             }
@@ -804,9 +833,10 @@ void LoginScreen() {
         }
 
         Vector2 MousePosition = GetMousePosition();
+        
         // Define Buttons
-        Rectangle LoginButton = {startX, buttonDY, buttonWidth, buttonHeight};
-        Rectangle BackButton = {300, 500, 200, 50};
+        Rectangle LoginButton = {190, 500, buttonWidth, buttonHeight};
+        Rectangle BackButton = {190 + buttonWidth + buttonSpacing, 500, buttonWidth, buttonHeight};
 
         // Check if mouse is hovering over the buttons
         bool HoverLogin = CheckCollisionPointRec(MousePosition, LoginButton);
@@ -816,11 +846,11 @@ void LoginScreen() {
         Color LoginColor = HoverLogin ? DARKBLUE : BLUE;
         Color BackColor = HoverBack ? DARKGRAY : GRAY;
     
-        DrawRectangleRec(LoginButton, HoverLogin ? DARKGREEN : GREEN);
-        DrawText("Login", LoginButton.x + 40, LoginButton.y + 15, 20, WHITE);
+        DrawRectangleRec(LoginButton, LoginColor);
+        DrawText("Login", LoginButton.x + 70, LoginButton.y + 15, 20, WHITE);
     
-        DrawRectangleRec(BackButton, HoverBack ? MAROON : RED);
-        DrawText("Back", BackButton.x + 50, BackButton.y + 15, 20, WHITE);
+        DrawRectangleRec(BackButton, BackColor);
+        DrawText("Back", BackButton.x + 70, BackButton.y + 15, 20, WHITE);
 
         // Handle Login button click (Always active)
         if (CheckCollisionPointRec(MousePosition, LoginButton) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
@@ -847,22 +877,40 @@ void TransactionScreen() {
     while (!done) {
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        DrawText("Candy Payment Transaction", 250, 100, 20, BLACK);
 
-        // Display input prompts
-        DrawText("Enter Account:", 250, 180, 20, BLACK);
-        DrawText("Enter Amount:", 250, 230, 20, BLACK);
+        // Measure text widths
+        int titleWidth = MeasureText("Ransom Payment Transaction", 30);
+        int prompt1Width = MeasureText("Enter Ransom Account:", 20);
+        int prompt2Width = MeasureText("Enter Amount:", 20);
+
+        int enteredAccountWidth = MeasureText(EnteredAccount, 20);
+        int enteredAmountWidth = MeasureText(EnteredAmount, 20);
+
+        // Centered X positions
+        int titleX = (screenWidth - titleWidth) / 2;
+        int prompt1X = (screenWidth - prompt1Width) / 2;
+        int prompt2X = (screenWidth - prompt2Width) / 2;
+
+        int inputBoxX = (screenWidth - 300) / 2;
+
+        int enteredAccountX = (screenWidth - enteredAccountWidth) / 2;
+        int enteredAmountX = (screenWidth - enteredAmountWidth) / 2;
+
+        // Draw centered text
+        DrawText("Ransom Payment Transaction", titleX, 100, 30, BLACK);
+        DrawText("Enter Ransom Account:", prompt1X, 180, 20, BLACK);
+        DrawText("Enter Amount:", prompt2X, 280, 20, BLACK);
 
         // Highlight the active input box
         if (EnteringAccount) {
-            DrawRectangleLines(350, 175, 200, 30, RED);
+            DrawRectangleLines(inputBoxX, 210, 300, 30, RED);
         } else {
-            DrawRectangleLines(350, 225, 200, 30, RED);
+            DrawRectangleLines(inputBoxX, 310, 300, 30, RED);
         }
 
-        // Display entered values
-        DrawText(EnteredAccount, 360, 185, 20, BLACK);
-        DrawText(EnteredAmount, 360, 235, 20, BLACK);
+        // Display entered values centered
+        DrawText(EnteredAccount, enteredAccountX, 210, 20, BLACK);
+        DrawText(EnteredAmount, enteredAmountX, 310, 20, BLACK);
 
         // Handle keyboard input
         int key = GetCharPressed();
@@ -895,23 +943,27 @@ void TransactionScreen() {
         Vector2 MousePosition = GetMousePosition();
 
         // Define buttons
-        Rectangle PayButton = {250, 300, 150, 50};
-        Rectangle BackButton = {450, 300, 150, 50};
+        Rectangle PayButton = {190, 500, buttonWidth, buttonHeight};
+        Rectangle BackButton = {190 + buttonWidth + buttonSpacing, 500, buttonWidth, buttonHeight};
 
         // Check if mouse is hovering over the buttons
         bool HoverPay = CheckCollisionPointRec(MousePosition, PayButton);
         bool HoverBack = CheckCollisionPointRec(MousePosition, BackButton);
 
-        // Change color if hovered
-        DrawRectangleRec(PayButton, HoverPay ? DARKGREEN : GREEN);
-        DrawText("Pay", PayButton.x + 50, PayButton.y + 15, 20, WHITE);
+        // Change color if hovered, otherwise use default color
+        Color PayColor = HoverPay ? DARKBLUE : BLUE;
+        Color BackColor = HoverBack ? DARKGRAY : GRAY;
 
-        DrawRectangleRec(BackButton, HoverBack ? MAROON : RED);
-        DrawText("Back", BackButton.x + 50, BackButton.y + 15, 20, WHITE);
+        // Change color if hovered
+        DrawRectangleRec(PayButton, PayColor);
+        DrawText("Pay", PayButton.x + 80, PayButton.y + 15, 20, WHITE);
+
+        DrawRectangleRec(BackButton, BackColor);
+        DrawText("Back", BackButton.x + 70, BackButton.y + 15, 20, WHITE);
 
         // Handle Pay button click
         if (HoverPay && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            if (strcmp(EnteredAccount, correctAccount) == 0 && atof(EnteredAmount) == requiredCandy) {
+            if (strcmp(EnteredAccount, correctAccount) == 0 && atof(EnteredAmount) == requiredAmount) {
                 for (int i = 0; i <= 100; i += 10) {
                     BeginDrawing();
                     ClearBackground(RAYWHITE);
