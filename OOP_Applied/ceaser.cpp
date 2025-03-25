@@ -35,7 +35,8 @@ string CeaserCipher::generateRandomKey() {
 void CeaserCipher::encrypt(const string &filename) {
 	string key = generateRandomKey();
 	storeKey(filename, key);
-	ifstream file(filename);  // open file to read
+
+    ifstream file(filename);
 	
 	string result = "";
 	char c;  // reads each character from the file to convert
@@ -53,16 +54,21 @@ void CeaserCipher::encrypt(const string &filename) {
 
 	// open file again to write encrypted content back to file
 	ofstream outFile(filename);
-	
 	outFile << result;
 	outFile.close();
 }
 
 void CeaserCipher::decrypt(const string &filename) {
 	string key = retrieveKey(filename);
-	ifstream file(filename);
+
+	if (key.empty()) { // If key is not found
+        cerr << "Error: No key found for " << filename << endl; // Print error message
+        return; // Exit function
+    }
+
+    ifstream file(filename);
 	
-	string result = "";
+    string result = "";
 	char c;  // reads each character from the file to convert
 	while (file.get(c)) {
 		// decrypt Uppercase letters
@@ -77,7 +83,6 @@ void CeaserCipher::decrypt(const string &filename) {
 
 	// save encrypted content back to file
 	ofstream outFile(filename);
-	
 	outFile << result;
 	outFile.close();
 }
