@@ -21,13 +21,6 @@ public:
     void decrypt(const string &filename) override;
 };
 
-// Caesar cipher encryption
-class CaesarEncryption : public Encryption {
-public:
-    void encrypt(const string &filename) override;
-    void decrypt(const string &filename) override;
-};
-
 // PlayFair XOR encryption
 class PlayFairEncryption : public Encryption {
 public:
@@ -48,6 +41,7 @@ class VigenereEncryption : public Encryption {
         string retrieveKey(const string &filename); // Retrieves the stored encryption key from "keylog.txt"
 };
 
+// Ceaser cipher encryption child class of Encryption
 class CeaserCipher : public Encryption{
 	private:
     string generateRandomKey();
