@@ -1,4 +1,5 @@
 #include "encryption.h"
+#include "railfence.h"  // Include Rail Fence Cipher
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -60,6 +61,36 @@ void CaesarEncryption::decrypt(const string &filename) {
     outFile << decryptedText;
     outFile.close();
 }
+
+// RAIL FENCE CIPHER encryption methods
+void RailFenceEncryption::encrypt(const string &filename) {
+    ifstream file(filename);
+    if (!file) return;
+    string content((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
+    file.close();
+
+    int rails = 3; // Default number of rails (can be modified)
+    string cipherText = encodeRailFence(content, rails);
+
+    ofstream outFile(filename);
+    outFile << cipherText;
+    outFile.close();
+}
+
+void RailFenceEncryption::decrypt(const string &filename) {
+    ifstream file(filename);
+    if (!file) return;
+    string cipherText((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
+    file.close();
+
+    int rails = 3; // Default number of rails 
+    string decryptedText = decodeRailFence(cipherText, rails);
+
+    ofstream outFile(filename);
+    outFile << decryptedText;
+    outFile.close();
+}
+
 
 // PlayFair XOR encryption methods
 void PlayFairEncryption::encrypt(const string &filename) {
