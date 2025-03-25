@@ -23,42 +23,6 @@ void ReverseEncryption::encrypt(const string &filename) {
 void ReverseEncryption::decrypt(const string &filename) {
     encrypt(filename);  // Reversing again decrypts
 }
-// Caesar cipher encryption methods
-// void CaesarEncryption::encrypt(const string &filename) {
-//     ifstream file(filename);
-//     if (!file) return;
-//     string content((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
-//     file.close();
-
-//     ostringstream oss;
-//     for (char ch : content) {
-//         oss << static_cast<int>(ch) << " ";  // Convert each character to ASCII
-//     }
-
-//     ofstream outFile(filename);
-//     outFile << oss.str();
-//     outFile.close();
-// }
-
-// void CaesarEncryption::decrypt(const string &filename) {
-//     ifstream file(filename);
-//     if (!file) return;
-//     string content;
-//     getline(file, content);
-//     file.close();
-
-//     istringstream iss(content);
-//     string token;
-//     string decryptedText;
-
-//     while (iss >> token) {
-//         decryptedText += static_cast<char>(stoi(token));  // Convert ASCII back to characters
-//     }
-
-//     ofstream outFile(filename);
-//     outFile << decryptedText;
-//     outFile.close();
-// }
 
 // PlayFair XOR encryption methods
 void PlayFairEncryption::encrypt(const string &filename) {
@@ -108,67 +72,54 @@ void VigenereEncryption::storeKey(const string &filename, const string &key) {
     keylog.close();
 }
 
-// // Function to retrieve the key from keylog.txt
-// string VigenereEncryption::retrieveKey(const string &filename) {
-//     ifstream keylog("keylog.txt"); // Open keylog.txt for reading
-//     string file, key; // Variables to store file entries
-//     while (keylog >> file >> key) { // Read filename-key pairs from the file
-//         if (file == filename) { // If filename matches the requested file
-//             return key; // Return the corresponding key
-//         }
-//     }
-//     return "";  // Return empty string if key not found
-// }
-
 // Function to retrieve and remove the last encryption key for a given file
 string VigenereEncryption::retrieveKey(const string &filename) {
-    string keylogFile = "keylog.txt";
-    vector<pair<string, string>> entries;
-    string lastKey = "";
-    bool found = false;
+    string keylogFile = "keylog.txt"; // File where keys are logged
+    vector<pair<string, string>> entries; // Stores file-key pairs from the log
+    string lastKey = ""; // Variable to hold the last found key
+    bool found = false; // Flag to check if the key was found
 
     // Read all entries from the key log file
-    ifstream infile(keylogFile);
-    if (!infile) { // Check if file exists
+    ifstream infile(keylogFile); // Open the key log file for reading
+    if (!infile) { // Check if the file exists and can be opened
         cerr << "Error: Key log file not found!" << endl;
-        return "";
+        return ""; // Return empty string if file is not found
     }
 
-    string file, key;
-    while (infile >> file >> key) {
-        entries.push_back({file, key});
-        if (file == filename) {
+    string file, key; 
+    while (infile >> file >> key) { // Read each file-key pair from the file
+        entries.push_back({file, key}); // Store the pair in the vector
+        if (file == filename) { // Check if the filename matches the given one
             lastKey = key;  // Store the latest matching key
-            found = true;
+            found = true; // Set flag to indicate the key was found
         }
     }
-    infile.close();
+    infile.close(); // Close the input file
 
-    if (!found) {
+    if (!found) { // If no key was found for the given filename
         cerr << "Error: No key found for " << filename << endl;
-        return "";
+        return ""; // Return an empty string
     }
 
     // Remove only the last key entry for this file
-    ofstream outfile(keylogFile);
-    if (!outfile) {
+    ofstream outfile(keylogFile); // Open the file for writing (this clears its contents)
+    if (!outfile) { // Check if the file was successfully opened
         cerr << "Error: Unable to update key log file!" << endl;
-        return "";
+        return ""; // Return empty string if file cannot be written to
     }
 
-    bool removed = false;
-    for (const auto &entry : entries) {
+    bool removed = false; // Flag to track if the last key entry has been removed
+    for (const auto &entry : entries) { // Iterate through all stored entries
         if (entry.first == filename && entry.second == lastKey && !removed) {
-            removed = true;  // Skip writing this specific key (remove it)
+            removed = true;  // Skip writing this specific key (remove it from log)
         } else {
-            outfile << entry.first << " " << entry.second << endl;
+            outfile << entry.first << " " << entry.second << endl; // Write entry back to file
         }
     }
-    outfile.close();
+    outfile.close(); // Close the output file after updating it
 
-    return lastKey;
+    return lastKey; // Return the last found key
 }
-
 
 // Generate full key for encryption/decryption based on text length
 string VigenereEncryption::generateKey(const string& text, const string& keyword) {
@@ -262,53 +213,51 @@ void CeaserCipher::storeKey(const string &filename, const string &key) {
 
 string CeaserCipher::retrieveKey(const string &filename) {
     string keylogFile = "ceaserkeylog.txt";
-    vector<pair<string, string>> entries;
-    string lastKey = "";
-    bool found = false;
+    vector<pair<string, string>> entries; // Stores file-key pairs from the log
+    string lastKey = ""; // Variable to hold the last found key
+    bool found = false; // Flag to check if the key was found
 
-    // Read all entries from keylog file
-    ifstream infile(keylogFile);
-    string file, key;
-    while (infile >> file >> key) {
-        entries.push_back({file, key});
-        if (file == filename) {
+    // Read all entries from the key log file
+    ifstream infile(keylogFile); // Open the key log file for reading
+    if (!infile) { // Check if the file exists and can be opened
+        cerr << "Error: Key log file not found!" << endl;
+        return ""; // Return empty string if file is not found
+    }
+
+    string file, key; 
+    while (infile >> file >> key) { // Read each file-key pair from the file
+        entries.push_back({file, key}); // Store the pair in the vector
+        if (file == filename) { // Check if the filename matches the given one
             lastKey = key;  // Store the latest matching key
-            found = true;
+            found = true; // Set flag to indicate the key was found
         }
     }
-    infile.close();
+    infile.close(); // Close the input file
 
-    if (!found) {
+    if (!found) { // If no key was found for the given filename
         cerr << "Error: No key found for " << filename << endl;
-        return "";
+        return ""; // Return an empty string
     }
 
-    // Remove the last used key entry
-    ofstream outfile(keylogFile);
-    bool removed = false;
-    for (const auto &entry : entries) {
+    // Remove only the last key entry for this file
+    ofstream outfile(keylogFile); // Open the file for writing (this clears its contents)
+    if (!outfile) { // Check if the file was successfully opened
+        cerr << "Error: Unable to update key log file!" << endl;
+        return ""; // Return empty string if file cannot be written to
+    }
+
+    bool removed = false; // Flag to track if the last key entry has been removed
+    for (const auto &entry : entries) { // Iterate through all stored entries
         if (entry.first == filename && entry.second == lastKey && !removed) {
-            removed = true;  // Skip writing this entry (remove it)
+            removed = true;  // Skip writing this specific key (remove it from log)
         } else {
-            outfile << entry.first << " " << entry.second << endl;
+            outfile << entry.first << " " << entry.second << endl; // Write entry back to file
         }
     }
-    outfile.close();
+    outfile.close(); // Close the output file after updating it
 
-    return lastKey;
+    return lastKey; // Return the last found key
 }
-
-// Function to retrieve the key from keylog.txt
-// string CeaserCipher::retrieveKey(const string &filename) {
-//     ifstream keylog("ceaserkeylog.txt"); // Open ceaserkeylog.txt for reading
-//     string file, key; // Variables to store file entries
-//     while (keylog >> file >> key) { // Read filename-key pairs from the file
-//         if (file == filename) { // If filename matches the requested file
-//             return key; // Return the corresponding key
-//         }
-//     }
-//     return "";  // Return empty string if key not found
-// }
 
 string CeaserCipher::generateRandomKey() {
     srand(time(0));  // Seed for randomness (should be called once in main usually)
