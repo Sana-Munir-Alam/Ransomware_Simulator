@@ -24,28 +24,6 @@ void ReverseEncryption::decrypt(const string &filename) {
     encrypt(filename);  // Reversing again decrypts
 }
 
-// // PlayFair XOR encryption methods
-// void PlayFairEncryption::encrypt(const string &filename) {
-//     ifstream file(filename);
-//     if (!file) return;
-//     string content((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
-//     file.close();
-
-//     char key = 'K';  // XOR key
-//     for (char &ch : content) {
-//         ch ^= key;
-//     }
-
-//     ofstream outFile(filename);
-//     outFile << content;
-//     outFile.close();
-// }
-
-// void PlayFairEncryption::decrypt(const string &filename) {
-//     encrypt(filename);  // XOR is reversible
-// }
-
-// THIS IS GOING TO BE THE PART FROM WHERE OUR REAL ENCRYPTION/DECRYPTION ALGORITHMS WORKS
 /*
 ▗▖  ▗▖▗▄▄▄▖ ▗▄▄▖▗▄▄▄▖▗▖  ▗▖▗▄▄▄▖▗▄▄▖ ▗▄▄▄▖     ▗▄▄▖▗▄▄▄▖▗▄▄▖ ▗▖ ▗▖▗▄▄▄▖▗▄▄▖ 
 ▐▌  ▐▌  █  ▐▌   ▐▌   ▐▛▚▖▐▌▐▌   ▐▌ ▐▌▐▌       ▐▌     █  ▐▌ ▐▌▐▌ ▐▌▐▌   ▐▌ ▐▌
