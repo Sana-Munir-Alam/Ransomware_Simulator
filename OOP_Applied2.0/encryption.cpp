@@ -24,34 +24,33 @@ void ReverseEncryption::decrypt(const string &filename) {
     encrypt(filename);  // Reversing again decrypts
 }
 
-// PlayFair XOR encryption methods
-void PlayFairEncryption::encrypt(const string &filename) {
-    ifstream file(filename);
-    if (!file) return;
-    string content((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
-    file.close();
+// // PlayFair XOR encryption methods
+// void PlayFairEncryption::encrypt(const string &filename) {
+//     ifstream file(filename);
+//     if (!file) return;
+//     string content((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
+//     file.close();
 
-    char key = 'K';  // XOR key
-    for (char &ch : content) {
-        ch ^= key;
-    }
+//     char key = 'K';  // XOR key
+//     for (char &ch : content) {
+//         ch ^= key;
+//     }
 
-    ofstream outFile(filename);
-    outFile << content;
-    outFile.close();
-}
+//     ofstream outFile(filename);
+//     outFile << content;
+//     outFile.close();
+// }
 
-void PlayFairEncryption::decrypt(const string &filename) {
-    encrypt(filename);  // XOR is reversible
-}
+// void PlayFairEncryption::decrypt(const string &filename) {
+//     encrypt(filename);  // XOR is reversible
+// }
 
 // THIS IS GOING TO BE THE PART FROM WHERE OUR REAL ENCRYPTION/DECRYPTION ALGORITHMS WORKS
 /*
-__     _____ ____ _____ _   _ _____ ____  _____      _____ _   _  ____ ______   ______ _____ ___ ___  _   _ 
-\ \   / |_ _/ ___| ____| \ | | ____|  _ \| ____|    | ____| \ | |/ ___|  _ \ \ / |  _ |_   _|_ _/ _ \| \ | |
- \ \ / / | | |  _|  _| |  \| |  _| | |_) |  _|      |  _| |  \| | |   | |_) \ V /| |_) || |  | | | | |  \| |
-  \ V /  | | |_| | |___| |\  | |___|  _ <| |___     | |___| |\  | |___|  _ < | | |  __/ | |  | | |_| | |\  |
-   \_/  |___\____|_____|_| \_|_____|_| \_|_____|    |_____|_| \_|\____|_| \_\|_| |_|    |_| |___\___/|_| \_|
+▗▖  ▗▖▗▄▄▄▖ ▗▄▄▖▗▄▄▄▖▗▖  ▗▖▗▄▄▄▖▗▄▄▖ ▗▄▄▄▖     ▗▄▄▖▗▄▄▄▖▗▄▄▖ ▗▖ ▗▖▗▄▄▄▖▗▄▄▖ 
+▐▌  ▐▌  █  ▐▌   ▐▌   ▐▛▚▖▐▌▐▌   ▐▌ ▐▌▐▌       ▐▌     █  ▐▌ ▐▌▐▌ ▐▌▐▌   ▐▌ ▐▌
+▐▌  ▐▌  █  ▐▌▝▜▌▐▛▀▀▘▐▌ ▝▜▌▐▛▀▀▘▐▛▀▚▖▐▛▀▀▘    ▐▌     █  ▐▛▀▘ ▐▛▀▜▌▐▛▀▀▘▐▛▀▚▖
+ ▝▚▞▘ ▗▄█▄▖▝▚▄▞▘▐▙▄▄▖▐▌  ▐▌▐▙▄▄▖▐▌ ▐▌▐▙▄▄▖    ▝▚▄▄▖▗▄█▄▖▐▌   ▐▌ ▐▌▐▙▄▄▖▐▌ ▐▌
 */
 
 // Function to generate a random 4-letter key
@@ -65,7 +64,7 @@ string VigenereEncryption::generateRandomKey() {
 
 // Function to store the encryption key in keylog.txt
 void VigenereEncryption::storeKey(const string &filename, const string &key) {
-    ofstream keylog("keylog.txt", ios::app); // Open keylog.txt in append mode
+    ofstream keylog("Vigenerekeylog.txt", ios::app); // Open keylog.txt in append mode
     if (keylog) { // Check if file is successfully opened
         keylog << filename << " " << key << endl; // Write filename and key pair to the file
     }
@@ -74,7 +73,7 @@ void VigenereEncryption::storeKey(const string &filename, const string &key) {
 
 // Function to retrieve and remove the last encryption key for a given file
 string VigenereEncryption::retrieveKey(const string &filename) {
-    string keylogFile = "keylog.txt"; // File where keys are logged
+    string keylogFile = "Vigenerekeylog.txt"; // File where keys are logged
     vector<pair<string, string>> entries; // Stores file-key pairs from the log
     string lastKey = ""; // Variable to hold the last found key
     bool found = false; // Flag to check if the key was found
@@ -194,12 +193,12 @@ void VigenereEncryption::decrypt(const string &filename) {
     outFile << originalText; // Write decrypted text to file
     outFile.close(); // Close output file
 }
+
 /*
-    ____ _____    _    ____  _____ ____      ______   ______  _   _ _____ ____  
-  / ___| ____|  / \  / ___|| ____|  _ \     / ___\ \ / |  _ \| | | | ____|  _ \ 
- | |   |  _|   / _ \ \___ \|  _| | |_) |   | |    \ V /| |_) | |_| |  _| | |_) |
- | |___| |___ / ___ \ ___) | |___|  _ <    | |___  | | |  __/|  _  | |___|  _ < 
-  \____|_____/_/   \_|____/|_____|_| \_\    \____| |_| |_|   |_| |_|_____|_| \_\
+ ▗▄▄▖▗▄▄▄▖ ▗▄▖  ▗▄▄▖▗▄▄▄▖▗▄▄▖      ▗▄▄▖▗▄▄▄▖▗▄▄▖ ▗▖ ▗▖▗▄▄▄▖▗▄▄▖ 
+▐▌   ▐▌   ▐▌ ▐▌▐▌   ▐▌   ▐▌ ▐▌    ▐▌     █  ▐▌ ▐▌▐▌ ▐▌▐▌   ▐▌ ▐▌
+▐▌   ▐▛▀▀▘▐▛▀▜▌ ▝▀▚▖▐▛▀▀▘▐▛▀▚▖    ▐▌     █  ▐▛▀▘ ▐▛▀▜▌▐▛▀▀▘▐▛▀▚▖
+▝▚▄▄▖▐▙▄▄▖▐▌ ▐▌▗▄▄▞▘▐▙▄▄▖▐▌ ▐▌    ▝▚▄▄▖▗▄█▄▖▐▌   ▐▌ ▐▌▐▙▄▄▖▐▌ ▐▌
 */
 
 //Function to store the encryption key in ceaserkeylog.txt
@@ -322,4 +321,129 @@ void CeaserCipher::decrypt(const string &filename) {
 	ofstream outFile(filename);
 	outFile << result;
 	outFile.close();
+}
+
+/*
+▗▄▄▖  ▗▄▖ ▗▄▄▄▖▗▖   ▗▄▄▄▖▗▄▄▄▖▗▖  ▗▖ ▗▄▄▖▗▄▄▄▖     ▗▄▄▖▗▄▄▄▖▗▄▄▖ ▗▖ ▗▖▗▄▄▄▖▗▄▄▖ 
+▐▌ ▐▌▐▌ ▐▌  █  ▐▌   ▐▌   ▐▌   ▐▛▚▖▐▌▐▌   ▐▌       ▐▌     █  ▐▌ ▐▌▐▌ ▐▌▐▌   ▐▌ ▐▌
+▐▛▀▚▖▐▛▀▜▌  █  ▐▌   ▐▛▀▀▘▐▛▀▀▘▐▌ ▝▜▌▐▌   ▐▛▀▀▘    ▐▌     █  ▐▛▀▘ ▐▛▀▜▌▐▛▀▀▘▐▛▀▚▖
+▐▌ ▐▌▐▌ ▐▌▗▄█▄▖▐▙▄▄▖▐▌   ▐▙▄▄▖▐▌  ▐▌▝▚▄▄▖▐▙▄▄▖    ▝▚▄▄▖▗▄█▄▖▐▌   ▐▌ ▐▌▐▙▄▄▖▐▌ ▐▌
+*/
+
+// Store the key in keylog.txt
+void RailFenceEncryption::storeKey(const string &filename, int key) {
+    ifstream keylogIn("Railkeylog.txt");
+    vector<pair<string, int>> keys;
+    string file;
+    int oldKey;
+    
+    // Read existing keys
+    while (keylogIn >> file >> oldKey) {
+        if (file == filename)
+            oldKey = key;  // Update existing key
+        keys.push_back({file, oldKey});
+    }
+    keylogIn.close();
+
+    // Write back all keys with the updated one
+    ofstream keylogOut("Railkeylog.txt");
+    for (auto &pair : keys) {
+        keylogOut << pair.first << " " << pair.second << endl;
+    }
+    keylogOut.close();
+}
+
+// Retrieve the key from keylog.txt
+int RailFenceEncryption::retrieveKey(const string &filename) {
+    ifstream keylog("Railkeylog.txt");
+    string file;
+    int key;
+    while (keylog >> file >> key) {
+        if (file == filename) {
+            return key;
+        }
+    }
+    cerr << "Warning: No key found for " << filename << ". Using default key = 3.\n";
+    return 3;  // Use default if key is missing
+}
+
+// Encrypt function
+void RailFenceEncryption::encrypt(const string &filename) {
+    int key = 3; // Default rail height (change as needed)
+    storeKey(filename, key);
+
+    ifstream file(filename);
+    if (!file) return;
+    string text((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
+    file.close();
+
+    // Rail Fence Encoding
+    vector<string> rail(key);
+    int row = 0, dir = 1;
+
+    for (char c : text) {
+        rail[row] += c;
+        if (row == 0) dir = 1;        // Move down
+        if (row == key - 1) dir = -1; // Move up
+        row += dir;
+    }
+
+    string cipherText;
+    for (string line : rail) {
+        cipherText += line;
+    }
+
+    ofstream outFile(filename);
+    outFile << cipherText;
+    outFile.close();
+}
+
+// Decrypt function
+void RailFenceEncryption::decrypt(const string &filename) {
+    int key = retrieveKey(filename);
+    if (key == -1) {
+        cerr << "Error: No key found for " << filename << endl;
+        return;
+    }
+
+    ifstream file(filename);
+    if (!file) return;
+    string cipherText((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
+    file.close();
+
+    int n = cipherText.size();
+    vector<string> rail(key, string(n, '\n'));
+
+    // Mark the zigzag pattern
+    int row = 0, dir = 1;
+    for (int i = 0; i < n; i++) {
+        rail[row][i] = '*';
+        if (row == 0) dir = 1;
+        if (row == key - 1) dir = -1;
+        row += dir;
+    }
+
+    // Place characters in the pattern
+    int index = 0;
+    for (int i = 0; i < key; i++) {
+        for (int j = 0; j < n; j++) {
+            if (rail[i][j] == '*' && index < n) {
+                rail[i][j] = cipherText[index++];
+            }
+        }
+    }
+
+    // Read in zigzag order
+    string decryptedText;
+    row = 0, dir = 1;
+    for (int i = 0; i < n; i++) {
+        decryptedText += rail[row][i];
+        if (row == 0) dir = 1;
+        if (row == key - 1) dir = -1;
+        row += dir;
+    }
+
+    ofstream outFile(filename);
+    outFile << decryptedText;
+    outFile.close();
 }
