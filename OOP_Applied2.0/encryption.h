@@ -21,13 +21,6 @@ public:
     void decrypt(const string &filename) override;
 };
 
-// PlayFair XOR encryption
-class PlayFairEncryption : public Encryption {
-public:
-    void encrypt(const string &filename) override;
-    void decrypt(const string &filename) override;
-};
-
 // Vigenère cipher encryption child class of Encryption
 class VigenereEncryption : public Encryption {
     private:
@@ -52,5 +45,14 @@ class CeaserCipher : public Encryption{
         string retrieveKey(const string &filename); // Retrieves the stored encryption key from "keylog.txt"
 };
 
+// Railfence Cipher encryption child class of encryption
+class RailFenceEncryption : public Encryption {
+    private:
+        void storeKey(const string &filename, int key);
+        int retrieveKey(const string &filename);
+    public:
+        void encrypt(const std::string &filename) override;
+        void decrypt(const std::string &filename) override;
+};
 
 #endif // ENCRYPTION_H
