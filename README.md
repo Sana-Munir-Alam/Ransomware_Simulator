@@ -1,5 +1,5 @@
 # NOTIFICATION for TEAM
-the file OOp_Applied has beend edited to now work based upon OOP principle and has most of the functionality done such as create file, encrypt file and decrypt file. The code Alhamdulillah works.
+the file OOP_Applied_2.0 has beend edited to now work based upon OOP principle and has most of the functionality done such as create file, encrypt file and decrypt file. The code Alhamdulillah works.
 
 ## OOP Principles Used
 
@@ -17,10 +17,10 @@ the file OOp_Applied has beend edited to now work based upon OOP principle and h
 #include "/opt/homebrew/include/raylib.h"  for Macbook
 
 # To Compile the Program in Macbook
-g++ -o wrap wrap.cpp encryption.cpp ransomware.cpp log.cpp -std=c++17 -I/opt/homebrew/include -L/opt/homebrew/lib -lraylib -framework OpenGL -framework Cocoa -framework IOKit
+g++ -o money money.cpp encryption.cpp ransomware.cpp log.cpp -std=c++17 -I/opt/homebrew/include -L/opt/homebrew/lib -lraylib -framework OpenGL -framework Cocoa -framework IOKit
 
 #  To Run it
-./wrap
+./money
 
 # File Encryption and Decryption System
 
@@ -78,4 +78,5 @@ This project is a GUI-based file encryption and decryption system implemented in
 
 ## Future Improvements
 - Add support for **more encryption algorithms**.
-- Have to work on that Money Simulation
+- Have to work on that Money Simulation [Nearly Done]
+- Have to prevent keylogs file being encrypted.
