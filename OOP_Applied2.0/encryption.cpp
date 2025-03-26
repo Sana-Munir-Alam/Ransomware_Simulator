@@ -309,52 +309,77 @@ void CeaserCipher::decrypt(const string &filename) {
 */
 
 // Store the key in keylog.txt
+// Generate a random key between 2 and 9
+int RailFenceEncryption::generateRandomKey() {
+	srand(time(0));  // Seed random number generator(Should be in main)
+    return (rand() % 8) + 2;
+}
 void RailFenceEncryption::storeKey(const string &filename, int key) {
     ifstream keylogIn("Railkeylog.txt");
     vector<pair<string, int>> keys;
     string file;
     int oldKey;
-    
+    bool updated = false;
+
     // Read existing keys
     while (keylogIn >> file >> oldKey) {
-        if (file == filename)
+        if (file == filename) {
             oldKey = key;  // Update existing key
+            updated = true;
+        }
         keys.push_back({file, oldKey});
     }
     keylogIn.close();
 
+    // If filename is not found, add it
+    if (!updated) {
+        keys.push_back({filename, key});
+    }
+
     // Write back all keys with the updated one
     ofstream keylogOut("Railkeylog.txt");
-    for (auto &pair : keys) {
+    for (const auto &pair : keys) {
         keylogOut << pair.first << " " << pair.second << endl;
     }
     keylogOut.close();
 }
+
 
 // Retrieve the key from keylog.txt
 int RailFenceEncryption::retrieveKey(const string &filename) {
     ifstream keylog("Railkeylog.txt");
     string file;
     int key;
+    
     while (keylog >> file >> key) {
         if (file == filename) {
             return key;
         }
     }
+    keylog.close();
+
+    // Store default key and return
     cerr << "Warning: No key found for " << filename << ". Using default key = 3.\n";
-    return 3;  // Use default if key is missing
+    storeKey(filename, 3);  // Store key properly
+    return 3;
 }
+
 
 // Encrypt function
 void RailFenceEncryption::encrypt(const string &filename) {
-    int key = 3; // Default rail height (change as needed)
+    int key = generateRandomKey();
     storeKey(filename, key);
-
     ifstream file(filename);
-    if (!file) return;
+     if (!file) {
+        cerr << "Error: Unable to open " << filename << " for reading.\n";
+        return;
+    }
     string text((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
     file.close();
-
+  if (text.empty()) {
+        cerr << "Error: File " << filename << " is empty. Nothing to encrypt.\n";
+        return;
+    }
     // Rail Fence Encoding
     vector<string> rail(key);
     int row = 0, dir = 1;
@@ -371,9 +396,16 @@ void RailFenceEncryption::encrypt(const string &filename) {
         cipherText += line;
     }
 
-    ofstream outFile(filename);
+    // Save encrypted text in a new file
+    string encryptedFilename = filename + "_encrypted";
+    ofstream outFile(encryptedFilename);
+    if (!outFile) {
+        cerr << "Error: Unable to create encrypted file.\n";
+        return;
+    }
     outFile << cipherText;
     outFile.close();
+    cout << "Encryption successful. Encrypted file: " << encryptedFilename << endl;
 }
 
 // Decrypt function
@@ -385,10 +417,16 @@ void RailFenceEncryption::decrypt(const string &filename) {
     }
 
     ifstream file(filename);
-    if (!file) return;
+      if (!file) {
+        cerr << "Error: Unable to open " << filename << " for reading.\n";
+        return;
+    }
     string cipherText((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
     file.close();
-
+  if (cipherText.empty()) {
+        cerr << "Error: File " << filename << " is empty. Nothing to decrypt.\n";
+        return;
+    }
     int n = cipherText.size();
     vector<string> rail(key, string(n, '\n'));
 
@@ -421,7 +459,14 @@ void RailFenceEncryption::decrypt(const string &filename) {
         row += dir;
     }
 
-    ofstream outFile(filename);
+    // Save decrypted text in a new file
+    string decryptedFilename = filename + "_decrypted";
+    ofstream outFile(decryptedFilename);
+    if (!outFile) {
+        cerr << "Error: Unable to create decrypted file.\n";
+        return;
+    }
     outFile << decryptedText;
     outFile.close();
+    cout << "Decryption successful. Decrypted file: " << decryptedFilename << endl;
 }
