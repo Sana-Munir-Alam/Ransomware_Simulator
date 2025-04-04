@@ -37,7 +37,7 @@ class VigenereEncryption : public Encryption {
 // Ceaser cipher encryption child class of Encryption
 class CeaserCipher : public Encryption{
 	private:
-    string generateRandomKey();
+        string generateRandomKey();
     public:
         void encrypt(const string &filename) override;
         void decrypt(const string &filename) override;
@@ -48,9 +48,10 @@ class CeaserCipher : public Encryption{
 // Railfence Cipher encryption child class of encryption
 class RailFenceEncryption : public Encryption {
     private:
+        int generateRandomKey();
+    public:
         void storeKey(const string &filename, int key);
         int retrieveKey(const string &filename);
-    public:
         void encrypt(const std::string &filename) override;
         void decrypt(const std::string &filename) override;
 };
