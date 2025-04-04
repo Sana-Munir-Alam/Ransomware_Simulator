@@ -40,7 +40,7 @@ string VigenereEncryption::generateRandomKey() {
     return randomKey; // Returns the generated key
 }
 
-// Function to store the encryption key in keylog.txt
+// Function to store the encryption key in Vigenerekeylog.txt
 void VigenereEncryption::storeKey(const string &filename, const string &key) {
     ofstream keylog("Vigenerekeylog.txt", ios::app); // Open keylog.txt in append mode
     if (keylog) { // Check if file is successfully opened
@@ -188,6 +188,7 @@ void CeaserCipher::storeKey(const string &filename, const string &key) {
     keylog.close();
 }
 
+// Function to retrieve and remove the last encryption key for a given file
 string CeaserCipher::retrieveKey(const string &filename) {
     string keylogFile = "ceaserkeylog.txt";
     vector<pair<string, string>> entries; // Stores file-key pairs from the log
@@ -236,12 +237,14 @@ string CeaserCipher::retrieveKey(const string &filename) {
     return lastKey; // Return the last found key
 }
 
+// Function to generate a random key
 string CeaserCipher::generateRandomKey() {
     srand(time(0));  // Seed for randomness (should be called once in main usually)
     int key = rand() % 26 + 1;  // Generate a random key between 1 and 26
     return to_string(key);  // Convert int to string
 }
 
+// Encrypt function with random key generation
 void CeaserCipher::encrypt(const string &filename) {
 	string key = generateRandomKey();
 	storeKey(filename, key);
@@ -270,6 +273,7 @@ void CeaserCipher::encrypt(const string &filename) {
 	outFile.close();
 }
 
+// Decrypt function that retrieves the saved key
 void CeaserCipher::decrypt(const string &filename) {
 	string key = retrieveKey(filename);
 
@@ -308,78 +312,82 @@ void CeaserCipher::decrypt(const string &filename) {
 ▐▌ ▐▌▐▌ ▐▌▗▄█▄▖▐▙▄▄▖▐▌   ▐▙▄▄▖▐▌  ▐▌▝▚▄▄▖▐▙▄▄▖    ▝▚▄▄▖▗▄█▄▖▐▌   ▐▌ ▐▌▐▙▄▄▖▐▌ ▐▌
 */
 
-// Store the key in keylog.txt
 // Generate a random key between 2 and 9
 int RailFenceEncryption::generateRandomKey() {
 	srand(time(0));  // Seed random number generator(Should be in main)
     return (rand() % 8) + 2;
 }
+
+//Function to store the encryption key in Railkeylog.txt
 void RailFenceEncryption::storeKey(const string &filename, int key) {
-    ifstream keylogIn("Railkeylog.txt");
-    vector<pair<string, int>> keys;
-    string file;
-    int oldKey;
-    bool updated = false;
-
-    // Read existing keys
-    while (keylogIn >> file >> oldKey) {
-        if (file == filename) {
-            oldKey = key;  // Update existing key
-            updated = true;
-        }
-        keys.push_back({file, oldKey});
-    }
-    keylogIn.close();
-
-    // If filename is not found, add it
-    if (!updated) {
-        keys.push_back({filename, key});
-    }
-
-    // Write back all keys with the updated one
-    ofstream keylogOut("Railkeylog.txt");
-    for (const auto &pair : keys) {
-        keylogOut << pair.first << " " << pair.second << endl;
-    }
-    keylogOut.close();
-}
-
-
-// Retrieve the key from keylog.txt
-int RailFenceEncryption::retrieveKey(const string &filename) {
-    ifstream keylog("Railkeylog.txt");
-    string file;
-    int key;
-    
-    while (keylog >> file >> key) {
-        if (file == filename) {
-            return key;
-        }
+    ofstream keylog("Railkeylog.txt", ios::app); // Open ceaserkeylog.txt in append mode
+    if (keylog) { // Check if file is successfully opened
+        keylog << filename << " " << key << endl; // Write filename and key pair to the file
     }
     keylog.close();
-
-    // Store default key and return
-    cerr << "Warning: No key found for " << filename << ". Using default key = 3.\n";
-    storeKey(filename, 3);  // Store key properly
-    return 3;
 }
 
+// Function to retrieve and remove the last encryption key for a given file
+int RailFenceEncryption::retrieveKey(const string &filename) {
+    string keylogFile = "Railkeylog.txt";
+    vector<pair<string, int>> entries;  // Stores file-key pairs from the log
+    string file;
+    int key;
+    int lastKey = -1;       // Variable to hold the last found key
+    bool found = false;     // Flag to check if the key was found
 
-// Encrypt function
+    // Read all entries from the key log file
+    ifstream infile(keylogFile); // Open the key log file for reading
+    if (!infile) { // Check if the file exists and can be opened
+        cerr << "Error: Key log file not found!" << endl;
+        return -1; // Return empty string if file is not found
+    }
+
+    // Read existing keys
+    while (infile >> file >> key) {     // Read each file-key pair from the file
+        entries.push_back({file, key}); // Store the pair in the vector
+        if (file == filename) {         // Check if the filename matches the given one
+            lastKey = key;              // Store the latest matching key
+            found = true;               // Set flag to indicate the key was found
+        }
+    }
+    infile.close(); // Close the input file
+
+    if (!found) {   // If no key was found for the given filename
+        cerr << "Error: No key found for " << filename << endl;
+        return -1;
+    }
+
+    // Remove only the last key entry for this file
+    ofstream outfile(keylogFile); // Open the file for writing (this clears its contents)
+    if (!outfile) { // Check if the file was successfully opened
+        cerr << "Error: Unable to update key log file!" << endl;
+        return -1; // Return empty string if file cannot be written to
+    }
+    
+    bool removed = false; // Flag to track if the last key entry has been removed
+    for (const auto &entry : entries) { // Iterate through all stored entries
+        if (entry.first == filename && entry.second == lastKey && !removed) {
+            removed = true;  // Skip writing this specific key (remove it from log)
+        } else {
+            outfile << entry.first << " " << entry.second << endl; // Write entry back to file
+        }
+    }
+    outfile.close(); // Close the output file after updating it
+
+    return lastKey;
+}
+
+// Encrypt function with random key generation
 void RailFenceEncryption::encrypt(const string &filename) {
     int key = generateRandomKey();
     storeKey(filename, key);
+
     ifstream file(filename);
-     if (!file) {
-        cerr << "Error: Unable to open " << filename << " for reading.\n";
-        return;
-    }
+    if (!file) return;
     string text((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
     file.close();
-  if (text.empty()) {
-        cerr << "Error: File " << filename << " is empty. Nothing to encrypt.\n";
-        return;
-    }
+
     // Rail Fence Encoding
     vector<string> rail(key);
     int row = 0, dir = 1;
@@ -396,19 +404,12 @@ void RailFenceEncryption::encrypt(const string &filename) {
         cipherText += line;
     }
 
-    // Save encrypted text in a new file
-    string encryptedFilename = filename + "_encrypted";
-    ofstream outFile(encryptedFilename);
-    if (!outFile) {
-        cerr << "Error: Unable to create encrypted file.\n";
-        return;
-    }
+    ofstream outFile(filename);
     outFile << cipherText;
     outFile.close();
-    cout << "Encryption successful. Encrypted file: " << encryptedFilename << endl;
 }
 
-// Decrypt function
+// Decrypt function that retrieves the saved key
 void RailFenceEncryption::decrypt(const string &filename) {
     int key = retrieveKey(filename);
     if (key == -1) {
@@ -417,16 +418,10 @@ void RailFenceEncryption::decrypt(const string &filename) {
     }
 
     ifstream file(filename);
-      if (!file) {
-        cerr << "Error: Unable to open " << filename << " for reading.\n";
-        return;
-    }
+    if (!file) return;
     string cipherText((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());
     file.close();
-  if (cipherText.empty()) {
-        cerr << "Error: File " << filename << " is empty. Nothing to decrypt.\n";
-        return;
-    }
+
     int n = cipherText.size();
     vector<string> rail(key, string(n, '\n'));
 
@@ -459,14 +454,7 @@ void RailFenceEncryption::decrypt(const string &filename) {
         row += dir;
     }
 
-    // Save decrypted text in a new file
-    string decryptedFilename = filename + "_decrypted";
-    ofstream outFile(decryptedFilename);
-    if (!outFile) {
-        cerr << "Error: Unable to create decrypted file.\n";
-        return;
-    }
+    ofstream outFile(filename);
     outFile << decryptedText;
     outFile.close();
-    cout << "Decryption successful. Decrypted file: " << decryptedFilename << endl;
 }
