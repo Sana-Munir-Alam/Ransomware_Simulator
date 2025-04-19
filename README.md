@@ -1,5 +1,5 @@
 # NOTIFICATION for TEAM
-Guys the project is complete Alhumdulillah.
+Guys the project is complete Alhumdulillah. The final folder of our project is named [Final Project].<br>
 It has a proper GUI system[Main.cpp].<br>A code [FileScanner.cpp] that would traverse the desktop and make a list of file and sub-files that exist in it and store it in a text file.<br>A code [Calling.cpp] that answers when to call for encryption and decryption.<br>A code [encryption.cpp] taht currently stores 3 type of encryptions that are applied to files.<br>A code [ransomeware.cpp] that genereats random password which is to be used to decrypt otherwise no decryption will occur.
 
 ## OOP Principles Used
