@@ -1,8 +1,7 @@
 # NOTIFICATION for TEAM
-The file A)Finalized Project is the final and latest folder containing our project. I will update you all about how it is working in one of the free slots. Currently if you run it you will not see encryption happening as i have not linked the process of encryption yet, As of now only .txt files that are exisiting on desktop and folders within are being traversed and getting encrypted/decrypted. I only have to work on the no .TXT files. After that the project would be declared as done.
-Another thing being that the ,TXT files will be encrypted using (Vignere, Caeser, RailFence) but the non.TXT files will be encrypted using (Railfence, and Caeser) as their key is numerical and are able to handle the binary format file encryption and decryption. 
-Currently Adeena is working on two more types of Encryption that use numerical keys and after we compile it in our project and it is working fine than we will let it remain else we will haev to think of something else.
-If any one of you want to add another encryption method do tell, just make sure it's style matches with the already written encryptions in encryption.cpp [in order to prevent the code from crashing due to styles not matching].
+The Project is done in a sense That it has Proper GUI, 3 encryption [Vignere, Ceaser, RailFence] That are able to encrypt and decrypt any type of text files, proper password is being generated before eecuting the decryption methods.
+The whole encryption and Decryption thing is happening properly within the GUI interface. The only problem is that our program is encrypting and decrypting it only when this FinalProject folder content are on the desktop, and not in a folder. SO i am gonna work on that and hopefully find a solution to this.
+if you have any suggestion do tell me
 
 
 ## OOP Principles Used
