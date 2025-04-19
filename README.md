@@ -1,8 +1,6 @@
 # NOTIFICATION for TEAM
-The Project is done in a sense That it has Proper GUI, 3 encryption [Vignere, Ceaser, RailFence] That are able to encrypt and decrypt any type of text files, proper password is being generated before eecuting the decryption methods.
-The whole encryption and Decryption thing is happening properly within the GUI interface. The only problem is that our program is encrypting and decrypting it only when this FinalProject folder content are on the desktop, and not in a folder. SO i am gonna work on that and hopefully find a solution to this.
-if you have any suggestion do tell me
-
+Guys the project is complete Alhumdulillah.
+It has a proper GUI system[Main.cpp].<br>A code [FileScanner.cpp] that would traverse the desktop and make a list of file and sub-files that exist in it and store it in a text file.<br>A code [Calling.cpp] that answers when to call for encryption and decryption.<br>A code [encryption.cpp] taht currently stores 3 type of encryptions that are applied to files.<br>A code [ransomeware.cpp] that genereats random password which is to be used to decrypt otherwise no decryption will occur.
 
 ## OOP Principles Used
 
