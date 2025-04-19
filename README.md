@@ -1,6 +1,15 @@
 # NOTIFICATION for TEAM
 Guys the project is complete Alhumdulillah. The final folder of our project is named [Final Project].<br>
-It has a proper GUI system[Main.cpp].<br>A code [FileScanner.cpp] that would traverse the desktop and make a list of file and sub-files that exist in it and store it in a text file.<br>A code [Calling.cpp] that answers when to call for encryption and decryption.<br>A code [encryption.cpp] taht currently stores 3 type of encryptions that are applied to files.<br>A code [ransomeware.cpp] that genereats random password which is to be used to decrypt otherwise no decryption will occur.
+It has a proper GUI system[Main.cpp].<br>
+A code [FileScanner.cpp] that would traverse the desktop and make a list of file and sub-files that exist in it and store it in a text file.<br>
+A code [Calling.cpp] that answers when to call for encryption and decryption.<br>
+A code [encryption.cpp] that currently stores 3 type of encryptions that are applied to files, More encryption can be added anytime.<br>
+A code [ransomeware.cpp] that genereats random password which is to be used to decrypt otherwise no decryption will occur.
+
+# NOTE:!!!!!
+One more thing, the two more encryption that I have asked of you guys. <br>
+DO NOT write it directly into the encryption.cpp file <br>
+INSTEAD create a new file in the FINAL PROJECT with the heading of your encryption type, and store it there, than I will add it in the project myself.
 
 ## OOP Principles Used
 
