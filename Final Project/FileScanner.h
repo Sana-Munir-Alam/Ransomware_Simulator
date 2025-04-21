@@ -1,5 +1,3 @@
-// FileScanner.h
-
 #ifndef FILESCANNER_H
 #define FILESCANNER_H
 
@@ -7,8 +5,7 @@
 using namespace std;
 
 namespace FileScanner {
-    // Techincally this function is being called as in the seperate file it was the main function and as we are combining it woth our project therefore the file could not have a main function hence we changed into a void function
-    void scanDesktopAndSave(const string& outputFilename);
+    void scanDesktopAndSave(const string& outputFilename);  // This function scans all files on the user's Desktop and writes their absolute paths to a file.
 }
 
 #endif // FILESCANNER_H
