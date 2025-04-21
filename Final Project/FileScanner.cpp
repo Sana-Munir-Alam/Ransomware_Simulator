@@ -7,10 +7,9 @@
 using namespace std;
 namespace fs = std::filesystem;
 
-namespace FileScanner{
-    // LOCAL FUCNTION ONLY VISIBLE IN THIS FILE
+namespace FileScanner{  // Using Namespace as a safeside so that no function name can be same as we have multiple cpp files, not doing it can result in logic collison.
 
-    // Function to check if a file should be skipped
+    // FUNCTION TO CHECK WHETHER A FILE IS TO BE SKIPPED
     bool shouldSkipFile(const fs::path& filePath) {
         string fileName = filePath.filename().string();
         
@@ -46,6 +45,7 @@ namespace FileScanner{
         return false;
     }
 
+    // FUNCTION TO SCAN THE FILES ON DESKTOP AND SAVE IT IN A FILE.
     void scanDesktopAndSave(const string& outputFilename){
         // Get HOME environment variable for macOS/Linux
         const char* homeDir = getenv("HOME");                        // Get the user's home directory path from environment variables (e.g., /Users/yourname)
