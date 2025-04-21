@@ -7,4 +7,4 @@ string GenerateRandomPassword();                // Generates a random 5-characte
 bool VerifyPassword(const string& password);    // Compares a given password with the previously generated one.
 string GetGeneratedPassword();                  // Returns the currently stored/generated password (for testing/debugging).
 
-#endif
+#endif  // RANSOMWARE_H
