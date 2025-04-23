@@ -3,7 +3,7 @@ Guys the project is complete Alhumdulillah. All the encryptions have been integr
 All files have been properly commented, kindly check it once so that no typo exist, only main.cpp file is left to have more comments will do later. <br>
 The final folder of our project is named [Final Project].<br>
 
-# 💻 Ransomware Simulation – OOP Project
+# Ransomware Simulation – OOP Project
 
 ## Overview
 
@@ -20,7 +20,7 @@ A code [ransomeware.cpp] that genereats random password which is to be used to d
 
 ---
 
-## 🎮 How It Works
+## How It Works
 
 1. **User Interaction**:
    - User launches a GUI that resembles a basic notepad.
