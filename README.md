@@ -46,10 +46,10 @@ A code [ransomeware.cpp] that genereats random password which is to be used to d
 | File               | Description |
 |--------------------|-------------|
 | `main.cpp`         | Handles GUI interaction and simulates the ransomware attack workflow. |
-| `Calling.*`        | Acts as a handler that decides whether to initiate encryption or decryption based on input. |
-| `encryption.*`     | Implements the encryption/decryption logic using four classical ciphers via OOP inheritance and polymorphism. |
-| `FileScanner.*`    | Scans the user’s Desktop and logs paths of files to be encrypted or decrypted. |
-| `ransomware.*`     | Handles the generation, storage, and verification of the decryption password. |
+| `Calling.`        | Acts as a handler that decides whether to initiate encryption or decryption based on input. |
+| `encryption.`     | Implements the encryption/decryption logic using four classical ciphers via OOP inheritance and polymorphism. |
+| `FileScanner.`    | Scans the user’s Desktop and logs paths of files to be encrypted or decrypted. |
+| `ransomware.`     | Handles the generation, storage, and verification of the decryption password. |
 
 ---
 
