@@ -38,7 +38,6 @@ A code [ransomeware.cpp] that genereats random password which is to be used to d
    - Upon "payment," a password is generated.
    - If the correct password is entered, the decryption process begins.
    - All files are returned to their original, readable state.
-   - 
 ---
 
 ## Project Structure
@@ -83,4 +82,3 @@ g++ -o main main.cpp FileScanner.cpp Calling.cpp encryption.cpp ransomware.cpp -
 ---
 # Things Left to do
 Create a Project Report including class diagram.<br>
-In the main.cpp file have it more commented also work on that color cycle screen to look more glitched.
