@@ -74,5 +74,5 @@ class AffineEncryption : public Encryption {
         void decryptNON(const string &filename) override;               // Overrides decrypt function for Affine cipher Non-Text File
         void storeKey(const string &filename, const string &key);       // Stores the encryption key in a file named "keylog.txt"       
         string retrieveKey(const string &filename);                     // Retrieves the stored encryption key from "keylog.txt"                    
-    };
+};
 #endif // ENCRYPTION_H
