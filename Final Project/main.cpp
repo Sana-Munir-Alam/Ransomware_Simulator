@@ -14,7 +14,7 @@ enum AppState {
     MAIN_MENU,
     CREATE_FILE,
     LOADING,
-    COLOR_CYCLE,
+    GLITCH_CYCLE,
     MATRIX_EFFECT,
     USER_LOGIN,
     TRANSACTION,
@@ -28,7 +28,7 @@ enum AppState {
 void ShowMainMenuWindow();
 void ShowCreateFileWindow();
 void ShowLoadingWindow();
-void ShowColorCycleWindow();
+void ShowGlitchWindow();
 void ShowMatrixEffectWindow();
 void LogintoUserAccount();
 void TransactionPage();
@@ -96,7 +96,7 @@ int main() {
             case MAIN_MENU: ShowMainMenuWindow(); break;
             case CREATE_FILE: ShowCreateFileWindow(); break;
             case LOADING: ShowLoadingWindow(); break;
-            case COLOR_CYCLE: ShowColorCycleWindow(); break;
+            case GLITCH_CYCLE: ShowGlitchWindow(); break;
             case MATRIX_EFFECT: ShowMatrixEffectWindow(); break;
             case USER_LOGIN: LogintoUserAccount(); break;
             case TRANSACTION: TransactionPage(); break;
@@ -343,7 +343,7 @@ void ShowLoadingWindow() {
             done = true;
             // CALLING FOR ENCRYPTION IN CALLING.cpp FILE
             RunEncryptionHandler(1);
-            state = COLOR_CYCLE;
+            state = GLITCH_CYCLE;
             frameCounter = 0;
             matrixTimer = 0; // reset for matrix countdown
         }
@@ -351,28 +351,69 @@ void ShowLoadingWindow() {
     }
 }
 
-// SHOW SYSTEM CRASH WINDOW
-void ShowColorCycleWindow() {
-    Color colors[] = { RED, BLUE, WHITE, GREEN };
-    const int framesPerColor = 60;
+// SHOW SYSTEM CRASH (GLITCH IMAGE) WINDOW
+void ShowGlitchWindow() {
+    Texture2D ransomImage = LoadTexture("ransom1.png");
+    const int screenWidth = GetScreenWidth();
+    const int screenHeight = GetScreenHeight();
+
+    // Center the image
+    int posX = (screenWidth - ransomImage.width) / 2;
+    int posY = (screenHeight - ransomImage.height) / 2;
+
+    // Prepare glitch timers
+    float glitchStart = 0.0f;
+    float glitchDuration = 0.0f;
+    bool glitchActive = false;
+
+    int timer = 0;
     bool done = false;
 
-    while (!done) {
-        BeginDrawing();
-        ClearBackground(colors[currentColor]);
+    SetTargetFPS(60);  // Just to be sure it's smooth
 
-        frameCounter++;
-        if (frameCounter >= framesPerColor) {
-            currentColor = (currentColor + 1) % 4;
-            frameCounter = 0;
+    while (!done && !WindowShouldClose()) {
+        float timeNow = GetTime();
+
+        // Randomly trigger a glitch ~once every few seconds
+        if (!glitchActive && (rand() % 180) == 0) {
+            glitchActive = true;
+            glitchStart = timeNow;
+            glitchDuration = 0.1f + (float)(rand() % 10) / 20.0f; // 0.1 to 0.6 sec
         }
-        matrixTimer++;
-        if (matrixTimer >= 60 * 10) { // after 10 seconds
-            done = true;
-            state = MATRIX_EFFECT;
-            InitMatrixDigits(200); // or however many digits we want
+
+        // End glitch after duration
+        if (glitchActive && (timeNow - glitchStart) > glitchDuration) {
+            glitchActive = false;
         }
+
+        BeginDrawing();
+        ClearBackground(BLACK);
+
+        if (!glitchActive) {
+            // Draw image normally
+            DrawTexture(ransomImage, posX, posY, WHITE);
+        } else {
+            // Draw glitchy lines
+            for (int i = 0; i < 10; i++) {
+                int lineY = rand() % ransomImage.height;
+                int height = 2 + rand() % 3;
+                int shift = -10 + rand() % 21;
+
+                Rectangle srcRec = { 0.0f, (float)lineY, (float)ransomImage.width, (float)height };
+                Rectangle destRec = { (float)(posX + shift), (float)(posY + lineY), (float)ransomImage.width, (float)height };
+                DrawTextureRec(ransomImage, srcRec, (Vector2){ destRec.x, destRec.y }, WHITE);
+            }
+        }
+
         EndDrawing();
+
+        // Timer for total animation duration
+        timer++;
+        if (timer > 60 * 10) { // after 10 seconds at 60fps
+            done = true;
+            state = MATRIX_EFFECT; // <-- continue your program state machine
+            InitMatrixDigits(200); // <-- your matrix initialization
+        }
     }
 }
 
