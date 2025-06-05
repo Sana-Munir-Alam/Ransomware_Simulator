@@ -21,7 +21,8 @@ enum AppState {
     MONEY_ANIME,
     THANKS,
     DECRYPT_BEGIN,
-    DECRYPT_ANIME
+    DECRYPT_ANIME,
+    RANSOMWARE
 };
 
 // Forward declarations
@@ -36,11 +37,12 @@ void MoneyAnimation();
 void ThankYou();
 void DecryptionBeginning();
 void DecryptingAnimation();
+void RansomwareSimulator();
 
 // Global State Variables
 AppState state = MAIN_MENU;
 const int screenWidth = 1480;
-const int screenHeight = 805;
+const int screenHeight = 815;
 int frameCounter = 0;
 
 float loadProgress = 0.0f;
@@ -59,8 +61,8 @@ bool messageComplete = false;
 int currentColor = 0;
 int matrixTimer = 0;
 
-char correctAccount[15] = "12345678912345";
-int requiredAmount = 10000;
+char correctAccount[15] = "26736283662216";
+int requiredAmount = 170000;
 
 // Matrix Effect Variables
 struct Digit {
@@ -84,7 +86,7 @@ void InitMatrixDigits(int count) {
 }
 
 int main() {
-    InitWindow(screenWidth, screenHeight, "Unified Window: Loading -> Color Cycle -> Matrix");
+    InitWindow(screenWidth, screenHeight, "Quill Text [OOP Project]");
     SetTargetFPS(60);
 
     // CALLING THE FILE SCANNER FUNCTION IN THE BEGINNING OF THE CODE SO THAT WE HAVE THE PATHWAYS TO FOLLOW ENCRYPTION OK
@@ -104,6 +106,7 @@ int main() {
             case THANKS: ThankYou(); break;
             case DECRYPT_BEGIN: DecryptionBeginning(); break;
             case DECRYPT_ANIME: DecryptingAnimation(); break;
+            case RANSOMWARE: RansomwareSimulator(); break;
         }
         EndDrawing();
     }
@@ -124,38 +127,54 @@ bool DrawCenteredButton(const char* text, int x, int y, int width, int height, C
 
 // SHOW MAIN MENU WINDOW
 void ShowMainMenuWindow() {
-    // Gradient Background
-    Color topColor = (Color){255, 188, 106, 255};  // light warm orange
-    Color bottomColor = (Color){255, 243, 176, 255}; // pale yellow
-    DrawRectangleGradientV(0, 0, screenWidth, screenHeight, topColor, bottomColor);
+    Texture2D logo1 = LoadTexture("Quill1.png");
+    bool done = false;
 
-    // Logo (Placeholder circle logo)
-    DrawCircle(screenWidth / 2, 120, 50, ORANGE);
-    DrawText("QuillText", screenWidth / 2 - MeasureText("QuillText", 36) / 2, 200, 36, DARKGRAY);
+    while (!done){
+        BeginDrawing();
+        // Gradient Background
+        Color topColor = (Color){255, 188, 106, 255};  // light warm orange
+        Color bottomColor = (Color){255, 243, 176, 255}; // pale yellow
+        DrawRectangleGradientV(0, 0, screenWidth, screenHeight, topColor, bottomColor);
 
-    const char* line1 = "Welcome to QuillText,";
-    const char* line2 = "Write your files and rest assured";
-    const char* line3 = "they are in safe hands.";
-
-    int fontSize = 30;
-    int spacing = 10;
-
-    // Calculate height for the text section
-    int totalHeight = fontSize * 3 + spacing * 2;
-    int startY = (screenHeight - totalHeight) / 2 + 30; // Adjusted for logo space [will see if i have time to add in logo using SVG]
-
-    // Draw welcome text
-    DrawText(line1, (screenWidth - MeasureText(line1, fontSize)) / 2, startY, fontSize, DARKGRAY);
-    DrawText(line2, (screenWidth - MeasureText(line2, fontSize)) / 2, startY + fontSize + spacing, fontSize, DARKGRAY);
-    DrawText(line3, (screenWidth - MeasureText(line3, fontSize)) / 2, startY + 2 * (fontSize + spacing), fontSize, DARKGRAY);
-
-    // Button position
-    int buttonY = startY + totalHeight + 50;
-    int buttonX = (screenWidth - 200) / 2 - 10;
-    Color DARKOLIVE = { 141, 135, 65, 255 };
-    Color OLIVE = { 168, 163, 74, 255 };
-    if (DrawCenteredButton("Create File", buttonX, buttonY, 200, 50, DARKOLIVE, OLIVE)) {
-        state = CREATE_FILE;
+        // Draw Logo
+        float targetSize = 150.0f; // Circle diameter
+        float scale = targetSize / (float)logo1.width;
+        int logoWidth = logo1.width * scale;
+        int logoHeight = logo1.height * scale;
+        int logoX = screenWidth / 2 - logoWidth / 2;
+        int logoY = 200 - logoHeight / 2;
+        DrawTextureEx(logo1, (Vector2){ (float)logoX, (float)logoY }, 0.0f, scale, WHITE);
+    
+    
+        DrawText("QuillText", screenWidth / 2 - MeasureText("QuillText", 36) / 2, 270, 36, DARKGRAY);
+    
+        const char* line1 = "Welcome to QuillText,";
+        const char* line2 = "Write your files and rest assured";
+        const char* line3 = "they are in safe hands.";
+    
+        int fontSize = 30;
+        int spacing = 10;
+    
+        // Calculate height for the text section
+        int totalHeight = fontSize * 3 + spacing * 2;
+        int startY = (screenHeight - totalHeight) / 2; // Adjusted for logo space [will see if i have time to add in logo using SVG]
+    
+        // Draw welcome text
+        DrawText(line1, (screenWidth - MeasureText(line1, fontSize)) / 2, startY, fontSize, DARKGRAY);
+        DrawText(line2, (screenWidth - MeasureText(line2, fontSize)) / 2, startY + fontSize + spacing, fontSize, DARKGRAY);
+        DrawText(line3, (screenWidth - MeasureText(line3, fontSize)) / 2, startY + 2 * (fontSize + spacing), fontSize, DARKGRAY);
+    
+        // Button position
+        int buttonY = startY + totalHeight + 50;
+        int buttonX = (screenWidth - 200) / 2 - 10;
+        Color DARKOLIVE = { 141, 135, 65, 255 };
+        Color OLIVE = { 168, 163, 74, 255 };
+        if (DrawCenteredButton("Create File", buttonX, buttonY, 200, 50, DARKOLIVE, OLIVE)) {
+            done = true;
+            state = CREATE_FILE;
+        }
+        EndDrawing();
     }
 }
 
@@ -374,8 +393,8 @@ void ShowGlitchWindow() {
     while (!done && !WindowShouldClose()) {
         float timeNow = GetTime();
 
-        // Randomly trigger a glitch ~once every few seconds
-        if (!glitchActive && (rand() % 180) == 0) {
+        // Randomly trigger a glitch ~once every few seconds [2]
+        if (!glitchActive && (rand() % 120) == 0) {
             glitchActive = true;
             glitchStart = timeNow;
             glitchDuration = 0.1f + (float)(rand() % 10) / 20.0f; // 0.1 to 0.6 sec
@@ -411,8 +430,8 @@ void ShowGlitchWindow() {
         timer++;
         if (timer > 60 * 10) { // after 10 seconds at 60fps
             done = true;
-            state = MATRIX_EFFECT; // <-- continue your program state machine
-            InitMatrixDigits(200); // <-- your matrix initialization
+            state = MATRIX_EFFECT;
+            InitMatrixDigits(200); // matrix initialization
         }
     }
 }
@@ -527,13 +546,28 @@ void LogintoUserAccount() {
     chrono::time_point<chrono::steady_clock> errorStartTime;  // Time of error occurrence
     string ErrorMessage = "";
 
+    Texture2D logo = LoadTexture("Bank1.png");
+
     bool done = false;
     while(!done){
         BeginDrawing();
-        DrawRectangleGradientV(0, 0, screenWidth, screenHeight, (Color){15, 25, 45, 255}, (Color){40, 60, 90, 255});
+        // --- Gradient Background ---
+        for (int y = 0; y < screenHeight; y++) {
+            float t = (float)y / screenHeight;
+            Color gradColor = {(unsigned char)(0 + t * 15), (unsigned char)(0 + t * 25), (unsigned char)(0 + t * 45), 255};
+            DrawRectangle(0, y, screenWidth, 1, gradColor);
+        }
 
         // Draw Logo (Placeholder circle logo)
-        DrawCircle(screenWidth / 2, 150, 40, DARKBLUE);
+        float targetSize = 120.0f; // Circle diameter
+        float scale = targetSize / (float)logo.width; // Uniform scaling based on width (assumes square image)
+        int logoWidth = logo.width * scale;
+        int logoHeight = logo.height * scale;
+        int logoX = screenWidth / 2 - logoWidth / 2;
+        int logoY = 150 - logoHeight / 2;
+        DrawTextureEx(logo, (Vector2){ (float)logoX, (float)logoY }, 0.0f, scale, WHITE);
+
+
         DrawText("NEXA BANK", screenWidth / 2 - MeasureText("NEXA BANK", 36) / 2 - 4, 210, 36, WHITE);
         DrawText("Secure Online Banking Login", screenWidth / 2 - MeasureText("Secure Online Banking Login", 20) / 2, 250, 20, LIGHTGRAY);
 
@@ -624,15 +658,27 @@ void TransactionPage() {
     chrono::time_point<chrono::steady_clock> errorStartTime;  // Time of error occurrence
     string ErrorMessage = "";
 
+    Texture2D logo = LoadTexture("Bank1.png");
     bool done = false;
     while (!done) {
         BeginDrawing();
 
-        // Gradient Background
-        DrawRectangleGradientV(0, 0, screenWidth, screenHeight, (Color){15, 25, 45, 255}, (Color){40, 60, 90, 255});
+        // --- Gradient Background ---
+        for (int y = 0; y < screenHeight; y++) {
+            float t = (float)y / screenHeight;
+            Color gradColor = {(unsigned char)(0 + t * 15), (unsigned char)(0 + t * 25), (unsigned char)(0 + t * 45), 255};
+            DrawRectangle(0, y, screenWidth, 1, gradColor);
+        }
 
         // Draw Logo (Placeholder circle logo)
-        DrawCircle(screenWidth / 2, 150, 40, DARKBLUE);
+        float targetSize = 120.0f; // Circle diameter
+        float scale = targetSize / (float)logo.width; // Uniform scaling based on width (assumes square image)
+        int logoWidth = logo.width * scale;
+        int logoHeight = logo.height * scale;
+        int logoX = screenWidth / 2 - logoWidth / 2;
+        int logoY = 150 - logoHeight / 2;
+        DrawTextureEx(logo, (Vector2){ (float)logoX, (float)logoY }, 0.0f, scale, WHITE);
+
         DrawText("NEXA BANK", screenWidth / 2 - MeasureText("NEXA BANK", 36) / 2 - 4, 210, 36, WHITE);
         DrawText("Secure Fund Transfer", screenWidth / 2 - MeasureText("SSecure Fund Transfer", 20) / 2, 250, 20, LIGHTGRAY);
 
@@ -687,7 +733,7 @@ void TransactionPage() {
                     done = true;
                     state = MONEY_ANIME;
                 }else{
-                    ErrorMessage = "Error: Incorrect Account or Amount!! [Account: 12345678912345]";
+                    ErrorMessage = "Error: Incorrect Account or Amount!! [Account: 26736283662216]";
                     showError = true;
                     errorStartTime = chrono::steady_clock::now();
                 }
@@ -948,9 +994,11 @@ void DecryptionBeginning() {
 
         // Decrypt Button
         int btnY = screenHeight / 2 + 50;
-        Color buttonColor = (CheckCollisionPointRec(GetMousePosition(), (Rectangle){(float)centerX, (float)btnY, 200, 50})) ? GOLD : SKYBLUE;
+    
+        Color TEAL = { 108, 122, 137, 255 };
+        Color DARKTEAL = { 75, 93, 103, 255 };
 
-        if (DrawCenteredButton("Decrypt", screenWidth / 2 - 100, btnY, 200, 50, buttonColor, SKYBLUE)) {
+        if (DrawCenteredButton("Decrypt", screenWidth / 2 - 100, btnY, 200, 50, DARKTEAL, TEAL)) {
             if (VerifyPassword(Password)) {
                 done = true;
                 // CALLING FOR DECRYPTION IN CALLING.cpp FILE
@@ -1104,11 +1152,127 @@ void DecryptingAnimation() {
 
             // Exit after full message shown
             if (currentCharIndex >= finalMessage.size() && (IsKeyPressed(KEY_ENTER) || IsMouseButtonPressed(MOUSE_LEFT_BUTTON))) {
-                state = MAIN_MENU;
+                state = RANSOMWARE;
                 done = true;
             }
         }
 
         EndDrawing();
     }
+}
+
+// ENDING PAGE
+void RansomwareSimulator() {
+    Texture2D ransomImage = LoadTexture("logo.png");
+    Texture2D skullImage = LoadTexture("Skull.png");
+
+    const int screenWidth = GetScreenWidth();
+    const int screenHeight = GetScreenHeight();
+
+    // Center the image
+    int posX = (screenWidth - ransomImage.width) / 2;
+    int posY = (screenHeight - ransomImage.height) / 2;
+
+    float scale = 0.5f;  // scale it to 50%
+    Rectangle source = { 0, 0, (float)ransomImage.width, (float)ransomImage.height };
+    Rectangle dest = {posX + ransomImage.width * (1 - scale) / 2,  // center properly
+        posY + ransomImage.height * (1 - scale) / 2, ransomImage.width * scale, ransomImage.height * scale
+    };
+
+    float skullScale = 0.03f;  // Make it about letter-sized; tweak between 0.03 - 0.1
+    Rectangle skullSource = { 0, 0, (float)skullImage.width, (float)skullImage.height };
+
+    // Define the safe zone (logo space)
+    Rectangle safeZone = {dest.x, dest.y, dest.width, dest.height};
+
+    // Prepare glitch timers
+    float glitchStart = 0.0f;
+    float glitchDuration = 0.0f;
+    bool glitchActive = false;
+
+    int timer = 0;
+    bool done = false;
+
+    const Color skullColor = RED;
+    const int fontSize = 20;
+    const int skullCount = 50;
+
+    // SKULL RAIN ANIMATION
+    struct SkullSymbol {
+        float x, y, speed;
+    };
+
+    vector<SkullSymbol> skull;
+    for (int i = 0; i < skullCount; i++) {
+        float x;
+        // Make sure skull is not inside the safeZone horizontally
+        while (true) {
+            x = static_cast<float>(GetRandomValue(0, screenWidth));
+            if (x < safeZone.x || x > (safeZone.x + safeZone.width)) break;
+        }
+        skull.push_back({ x, static_cast<float>(GetRandomValue(0, screenHeight)), GetRandomValue(20, 100) / 60.0f});
+    }
+
+    while (!done) {
+        // Close Window Condition
+        if (WindowShouldClose()) {
+            UnloadTexture(ransomImage);
+            UnloadTexture(skullImage);
+            CloseWindow();
+            exit(0);
+        }
+
+        float timeNow = GetTime();
+
+        // Randomly trigger a glitch
+        if (!glitchActive && (rand() % 180) == 0) {
+            glitchActive = true;
+            glitchStart = timeNow;
+            glitchDuration = 0.1f + (float)(rand() % 10) / 80.0f; // 0.1 to 0.6 sec
+        }
+
+        // End glitch after duration
+        if (glitchActive && (timeNow - glitchStart) > glitchDuration) {
+            glitchActive = false;
+        }
+
+        BeginDrawing();
+        ClearBackground(BLACK);
+
+        // --- Glitching logo ---
+        if (!glitchActive) {
+            DrawTexturePro(ransomImage, source, dest, { 0, 0 }, 0.0f, WHITE);
+
+        } else {
+            for (int i = 0; i < 10; i++) {
+                int lineY = rand() % ransomImage.height;
+                int height = 2 + rand() % 3;
+                int shift = -10 + rand() % 21;
+
+                Rectangle srcRec = { 0.0f, (float)lineY, (float)ransomImage.width, (float)height };
+                Rectangle destRec = { (float)(posX + shift), (float)(posY + lineY), (float)ransomImage.width, (float)height };
+                DrawTextureRec(ransomImage, srcRec, (Vector2){ destRec.x, destRec.y }, WHITE);
+            }
+        }
+
+        // --- Matrix Skull Rain (left + right side only) ---
+        for (auto& d : skull) {
+            d.y += d.speed;
+            Rectangle skullDest = {d.x, d.y, skullImage.width * skullScale, skullImage.height * skullScale};
+            if (d.y > screenHeight) {
+                d.y = -fontSize;
+                // Choose new x outside of safeZone
+                while (true) {
+                    d.x = GetRandomValue(0, screenWidth);
+                    if (d.x < safeZone.x || d.x > (safeZone.x + safeZone.width)) break;
+                }
+                d.speed = GetRandomValue(20, 100) / 60.0f;
+            }
+            DrawTexturePro(skullImage, skullSource, skullDest, { 0, 0 }, 0.0f, RED);
+        }
+        EndDrawing();
+    }
+    UnloadTexture(ransomImage);
+    UnloadTexture(skullImage);
+    state = MAIN_MENU;
 }
