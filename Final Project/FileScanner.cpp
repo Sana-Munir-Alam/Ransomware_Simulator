@@ -56,9 +56,9 @@ namespace FileScanner{  // Using Namespace as a safeside so that no function nam
     
         string desktopPath = string(homeDir) + "/Desktop";           // Construct the full path to the Desktop by appending "/Desktop" to the home path Eg: User/yourname/Desktop
     
-        ofstream outFile("Information2.txt");                         // Create a file named Information2.txt which will contain the File pathways on Desktop
+        ofstream outFile("Information.txt");                         // Create a file named Information.txt which will contain the File pathways on Desktop
         if (!outFile.is_open()) {                                     // Check if the file couldn't be opened
-            cerr << "Failed to open information2.txt for writing.\n"; // Print an Error
+            cerr << "Failed to open Information.txt for writing.\n"; // Print an Error
             return;                                                   // Exit the function.
         }
     
@@ -68,13 +68,13 @@ namespace FileScanner{  // Using Namespace as a safeside so that no function nam
                     if (shouldSkipFile(entry.path())) {                                 // Use our custom logic to skip unnecessary/hidden/system files.
                         continue;                                                       // Skip to the next file.
                     }
-                    outFile << entry.path().string() << "\n";   // Write the Absolute Path of the valid file to Information2.txt E.g User/yourname/Desktop/folder_names
+                    outFile << entry.path().string() << "\n";   // Write the Absolute Path of the valid file to Information.txt E.g User/yourname/Desktop/folder_names
                 }
             }
         } catch (const fs::filesystem_error& e) {               // Catch any filesystem-related exceptions (e.g., permission denied).
             cerr << "Filesystem error: " << e.what() << '\n';   // Print error message describing what went wrong.
         }
         outFile.close();                                        // Close the output file safely.
-        cout << "Done! File paths saved to information2.txt\n"; // Notify the programmer that the process is complete.
+        cout << "Done! File paths saved to Information.txt\n"; // Notify the programmer that the process is complete.
     }
 }
