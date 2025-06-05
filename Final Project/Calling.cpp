@@ -186,7 +186,7 @@ void ProcessDecryption(const string& Path){
 
 // THIS FUNCTION IS TECHNICALLY THE MAIN OF THIS .cpp file
 void RunEncryptionHandler(int Number) {
-    ifstream FileList("Information.txt");                           // Open the "Information2.txt" file which contains file paths to encrypt or decrypt
+    ifstream FileList("Information.txt");                           // Open the "Information.txt" file which contains file paths to encrypt or decrypt
     if (!FileList.is_open()) {                                      // Check if the file was successfully opened
         cerr << "Could not open Information.txt." << endl;          // Print the error message if unsuccessful.
         return;                                                     // Exit function.
@@ -202,7 +202,7 @@ void RunEncryptionHandler(int Number) {
     FileList.close();                                               // Close the file after reading all lines
 
     if (filePaths.empty()) {                                        // If the vector is empty, no valid file paths were found.
-        cerr << "No file paths found in Information.txt." << endl;  // Print Error Message.
+        cerr << "No file paths found in Information.txt." << endl; // Print Error Message.
         return;                                                     // Exit Function.
     }
 
