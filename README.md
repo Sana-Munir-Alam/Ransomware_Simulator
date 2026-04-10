@@ -1,84 +1,140 @@
-# NOTIFICATION for TEAM
-Guys the project is complete Alhumdulillah. All the encryptions have been integrated and tested to see if they are working properly.<br>
-All files have been properly commented, kindly check it once so that no typo exist, only main.cpp file is left to have more comments will do later. <br>
-The final folder of our project is named [Final Project].<br>
-
-# Ransomware Simulation – OOP Project
+# Ransomware Simulator
 
 ## Overview
 
-This project is a **simulation of a ransomware attack**, designed as an object-oriented programming (OOP) project. It mimics how a ransomware application might behave.
-This project is a GUI-based file encryption and decryption system implemented in **C++** using **raylib**.
+An object-oriented C++ simulation of a ransomware attack, built as an OOP course project. The application presents itself as a standard graphical text editor (resembling a notepad). When the user saves a file, a staged system "crash" sequence is triggered, after which all files on the user's Desktop are encrypted using four chained classical cipher algorithms. The user is then prompted to make a simulated "ransom payment," receives a generated password, and upon entering the correct password, all files are fully decrypted and restored. The project demonstrates OOP principles including abstraction, polymorphism, encapsulation, and modularity.
 
-The user interface appears as a regular text editing app, but upon saving a file, a simulated "system crash" is triggered. This initiates a mock ransomware attack that encrypts all files on the user's Desktop using a combination of four different encryption algorithms. The user is prompted to "pay a ransom" and, upon doing so, receives a password to unlock and decrypt their files.
+> **Disclaimer:** This is a purely educational simulation. No malicious code is present. All encryption targets only files explicitly within the scope of the simulation. Do not run on production systems.
 
-It has a proper GUI system [Main.cpp].<br>
-A code [FileScanner.cpp] that would traverse the desktop and make a list of file and sub-files that exist in it and store it in a text file.<br>
-A code [Calling.cpp] that answers when to call for encryption and decryption.<br>
-A code [encryption.cpp] that currently has 4 types of encryptions that are applied to files, More encryption can be added anytime.<br>
-A code [ransomeware.cpp] that genereats random password which is to be used to decrypt otherwise no decryption will occur.
+## Features
 
----
+- **Disguised GUI:** Application launches as a functional notepad-style text editor with a save button, obscuring its actual purpose
+- **Staged Crash Animation:** On file save, a fake progress bar halts at 87%, followed by a glitch/matrix visual effect sequence before displaying the ransom message
+- **Desktop File Scanner:** Recursively scans the user's Desktop directory and logs all file paths to a text file for encryption targeting
+- **Four-Layer Encryption Pipeline:** Files are encrypted sequentially using Vigenère, Caesar, Rail Fence, and Affine ciphers
+- **Text and Binary File Support:** Caesar, Rail Fence, and Affine ciphers handle both text (`.txt`) and non-text (binary) files via separate `encryptTXT`/`encryptNON` methods
+- **Key Persistence:** Each cipher stores its generated key in a `keylog.txt` file, which is used during decryption to reverse the transformation
+- **Ransom Payment Flow:** Simulated transaction, money animation, and thank-you screens before revealing the decryption password
+- **Password-Gated Decryption:** A randomly generated 5-character alphanumeric password must be entered correctly to begin decryption
+- **Full Decryption Restoration:** All files are fully restored to their original state on correct password entry
 
-## How It Works
+## Tech Stack
 
-1. **User Interaction**:
-   - User launches a GUI that resembles a basic notepad.
-   - They create a file, type its content, and click save.
-   - A progress bar halts at 87%, followed by a system "crash" animation.
-   - A message is displayed, simulating a ransomware attack.
+**Language:** C++17
 
-2. **Behind the Scenes**:
-   - All files on the user’s Desktop are scanned and encrypted using a combination of:
-     - **Vigenère Cipher**
-     - **Caesar Cipher**
-     - **Rail Fence Cipher**
-     - **Affine Cipher**
-   - The system prompts the user to make a "payment".
-   - Upon "payment," a password is generated.
-   - If the correct password is entered, the decryption process begins.
-   - All files are returned to their original, readable state.
----
+**Graphics Library:** Raylib
 
-## Project Structure
+**Encryption Algorithms:**
+- Vigenère Cipher (text files)
+- Caesar Cipher (text and binary files)
+- Rail Fence Cipher (text and binary files)
+- Affine Cipher (text and binary files)
 
-| File               | Description |
-|--------------------|-------------|
-| `main.cpp`         | Handles GUI interaction and simulates the ransomware attack workflow. |
-| `Calling.`        | Acts as a handler that decides whether to initiate encryption or decryption based on input. |
-| `encryption.`     | Implements the encryption/decryption logic using four classical ciphers via OOP inheritance and polymorphism. |
-| `FileScanner.`    | Scans the user’s Desktop and logs paths of files to be encrypted or decrypted. |
-| `ransomware.`     | Handles the generation, storage, and verification of the decryption password. |
+**Platform:** macOS (primary; uses `/opt/homebrew` Raylib path)
 
----
+**Standard Libraries:** `<string>`, `<fstream>`, `<filesystem>` (C++17), `<chrono>`, `<thread>`
 
-## Object-Oriented Design
+## System Design / Working
 
-The codebase follows core OOP principles:
-- **Abstraction**: An abstract `Encryption` base class defines a common interface for all encryption techniques.
-- **Polymorphism**: Each cipher class overrides the base class's `encryptTXT()` and `decryptTXT()` methods.
-- **Encapsulation**: Each cipher manages its own key generation and storage logic.
-- **Modularity**: Each major responsibility is split across separate files for maintainability and clarity.
+**OOP Design:**
 
-### Encryption Algorithms Implemented:
-- **Vigenère Cipher**: Text-based encryption using a keyword.
-- **Caesar Cipher**: Shifts characters by a fixed number; also supports non-text files.
-- **Rail Fence Cipher**: Rearranges characters in a zigzag pattern; works with both text and non-text data.
-- **Affine Cipher**: Uses mathematical functions for character substitution; includes binary-safe handling.
+The encryption subsystem is built around an abstract base class `Encryption` with two pure virtual methods: `encryptTXT()` and `decryptTXT()`. Two additional virtual methods, `encryptNON()` and `decryptNON()`, have default implementations that print an unsupported message, allowing subclasses to opt in for binary file support.
 
----
+```
+Encryption (abstract)
+├── VigenereEncryption   → text only
+├── CeaserCipher         → text + binary
+├── RailFenceEncryption  → text + binary
+└── AffineEncryption     → text + binary
+```
 
-# Ransomware Simulator
+Each subclass generates its own random key, stores it in `keylog.txt` with a unique entry per file, and retrieves it during decryption. This ensures each file's decryption is reversible.
 
-# Inlcude the Raylib library
-#include "/opt/homebrew/include/raylib.h"  for Macbook
+**Application State Machine:**
 
-# To Compile the Program in Macbook
-g++ -o main main.cpp FileScanner.cpp Calling.cpp encryption.cpp ransomware.cpp -std=c++17 -I/opt/homebrew/include -L/opt/homebrew/lib -lraylib -framework OpenGL -framework Cocoa -framework IOKit
+The Raylib GUI manages an `AppState` enum with the following flow:
 
-#  To Run it
+```
+MAIN_MENU → CREATE_FILE → LOADING (progress bar halts at 87%)
+  → GLITCH_CYCLE → MATRIX_EFFECT → USER_LOGIN
+  → TRANSACTION → MONEY_ANIME → THANKS
+  → DECRYPT_BEGIN → DECRYPT_ANIME
+  → RANSOMWARE (ransom message with typing effect)
+```
+
+**File Scanning (`FileScanner.cpp`):**
+
+Uses C++17 `std::filesystem::recursive_directory_iterator` to enumerate all files on the Desktop and write paths to a staging file.
+
+**Encryption Orchestration (`Calling.cpp`):**
+
+Reads the file list and invokes each cipher's encrypt or decrypt method in sequence. For text files, the full pipeline runs (Vigenère → Caesar → Rail Fence → Affine). For non-text files, only the three binary-capable ciphers are applied.
+
+**Password System (`ransomware.cpp`):**
+
+`GenerateRandomPassword()` produces a random 5-character string from lowercase letters and digits. The password is stored in memory and verified via `VerifyPassword()` on user input.
+
+## Screenshots
+
+![Screenshot 1](./screenshots/s1.png)
+![Screenshot 2](./screenshots/s2.png)
+![Screenshot 3](./screenshots/s3.png)
+![Screenshot 4](./screenshots/s4.png)
+
+## How to Run Locally
+
+```bash
+# Prerequisites: Raylib installed via Homebrew (macOS)
+brew install raylib
+
+# Clone the repository
+git clone <repo-url>
+cd "Ransomware_Simulator/Final Project"
+
+# Compile
+g++ -o main main.cpp FileScanner.cpp Calling.cpp encryption.cpp ransomware.cpp \
+    -std=c++17 \
+    -I/opt/homebrew/include \
+    -L/opt/homebrew/lib \
+    -lraylib \
+    -framework OpenGL \
+    -framework Cocoa \
+    -framework IOKit
+
+# Run
 ./main
+```
 
----
-# Things Left to do
-Create a Project Report including class diagram.<br>
+## Folder Structure
+
+```
+Ransomware_Simulator/
+├── Final Project/              # Complete integrated application
+│   ├── main.cpp                # Raylib GUI and app state machine
+│   ├── FileScanner.cpp / .h    # Desktop file enumeration
+│   ├── Calling.cpp / .h        # Encryption/decryption orchestration
+│   ├── encryption.cpp / .h     # Abstract base class + 4 cipher implementations
+│   └── ransomware.cpp / .h     # Password generation and verification
+│
+└── OOP_Applied/                # Modular prototype / earlier iteration
+    ├── ceaser.cpp / .h
+    ├── railfence.cpp / .h
+    ├── encryption.cpp / .h     # Base class
+    ├── log.cpp / .h            # Key logging
+    └── wrap.cpp                # Orchestration wrapper
+```
+
+## My Role
+
+I led the design and development of the overall system, implementing the core architecture and the majority of the application logic.
+
+- Designed the complete object-oriented architecture, including the abstract `Encryption` base class and polymorphic cipher implementations  
+- Implemented the full encryption pipeline, including the Vigenère cipher and the orchestration logic chaining all four algorithms  
+- Developed the file scanning system using C++17 `std::filesystem` and handled end-to-end encryption/decryption flow  
+- Built the Raylib-based GUI and application state machine, including the notepad disguise, staged crash sequence, glitch/matrix effects, and ransom interaction flow  
+- Implemented key generation, logging, and retrieval mechanisms to ensure accurate per-file decryption  
+- Designed and implemented the password-based decryption system  
+
+Additional contributions:
+- Caesar Cipher implemented by Adeena  
+- Rail Fence and Affine Cipher implementations contributed by Ahmed Affan  
