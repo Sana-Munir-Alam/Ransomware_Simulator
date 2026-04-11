@@ -1,5 +1,7 @@
 # Ransomware Simulator
 
+![Screenshot 0](./screenshots/s0.png)
+
 ## Overview
 
 An object-oriented C++ simulation of a ransomware attack, built as an OOP course project. The application presents itself as a standard graphical text editor (resembling a notepad). When the user saves a file, a staged system "crash" sequence is triggered, after which all files on the user's Desktop are encrypted using four chained classical cipher algorithms. The user is then prompted to make a simulated "ransom payment," receives a generated password, and upon entering the correct password, all files are fully decrypted and restored. The project demonstrates OOP principles including abstraction, polymorphism, encapsulation, and modularity.
@@ -76,10 +78,18 @@ Reads the file list and invokes each cipher's encrypt or decrypt method in seque
 
 ## Screenshots
 
-![Screenshot 1](./screenshots/s1.png)
+- "Disguised notepad interface — the application's initial appearance, Staged crash sequence — progress bar halting at 87% before glitch animation"
+![Screenshot 1](./screenshots/s1.gif)
+- "Ransom demand screen with typewriter-effect message"
 ![Screenshot 2](./screenshots/s2.png)
+- "Terminal showing the Files found on User computer, and the encryption applied on them"
 ![Screenshot 3](./screenshots/s3.png)
-![Screenshot 4](./screenshots/s4.png)
+- "Simulating Ransom Transaction, and after transfer. Decryption Password is given"
+![Screenshot 4](./screenshots/s4.gif)
+- "Decryption in progress after correct password entry"
+![Screenshot 5](./screenshots/s5.png)
+- "Decryption Complete, User files are returned to original form"
+![Screenshot 6](./screenshots/s6.png)
 
 ## How to Run Locally
 
